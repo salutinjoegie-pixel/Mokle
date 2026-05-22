@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>About — Section Mauchly</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+/* ===== ABOUT-SPECIFIC STYLES ===== */
+
+/* Search + filter bar */
+.roster-controls {
+  display:flex; gap:0.75rem; margin-bottom:1.5rem; flex-wrap:wrap;
+  align-items:center;
+}
+.search-input {
+  flex:1; min-width:200px;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:8px; padding:10px 16px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.88rem; color:var(--text);
+  outline:none; transition:border-color 0.2s;
+}
+.search-input:focus { border-color:var(--accent); }
+.search-input::placeholder { color:var(--text-muted); }
+
+.filter-select {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:8px; padding:10px 14px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.82rem; color:var(--text);
+  outline:none; cursor:pointer; transition:border-color 0.2s;
+}
+.filter-select:focus { border-color:var(--accent); }
+
+/* ---- GROUP PHOTO BANNER ---- */
+.group-photo-wrap {
+  position:relative; border-radius:16px; overflow:hidden;
+  border:1px solid var(--border); margin-bottom:2rem;
+  background:var(--card);
+  min-height:220px;
+  display:flex; align-items:center; justify-content:center;
+}
+.group-photo-wrap img {
+  width:100%; max-height:420px; object-fit:cover; display:block;
+  border-radius:16px;
+}
+.group-photo-placeholder {
+  width:100%; min-height:220px;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:0.75rem;
+  background:linear-gradient(135deg,
+    color-mix(in srgb,var(--accent) 8%,transparent),
+    color-mix(in srgb,var(--accent2) 5%,transparent));
+}
+.group-photo-placeholder .gp-icon {
+  font-size:3rem; opacity:0.3;
+}
+.group-photo-placeholder p {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.78rem; color:var(--text-muted); letter-spacing:2px;
+}
+.group-photo-wrap::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);
+  z-index:1;
+}
+.group-photo-caption {
+  position:absolute; bottom:0; left:0; right:0;
+  background:linear-gradient(0deg,rgba(5,12,26,0.88),transparent);
+  padding:1rem 1.5rem 1.25rem;
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.75rem; color:var(--accent2);
+  letter-spacing:2px; z-index:1;
+}
+
+/* ---- OFFICERS SECTION ---- */
+.officers-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));
+  gap:1.25rem;
+  margin-bottom:0.5rem;
+}
+
+.officer-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:1.5rem 1rem 1.25rem;
+  text-align:center; transition:all 0.22s;
+  cursor:default; position:relative; overflow:hidden;
+}
+.officer-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);
+}
+.officer-card:hover {
+  border-color:var(--accent);
+  background:var(--card2);
+  transform:translateY(-4px);
+  box-shadow:var(--glow);
+}
+
+/* Officer photo */
+.officer-photo {
+  width:84px; height:84px; border-radius:50%;
+  margin:0 auto 0.9rem;
+  border:2px solid var(--accent);
+  overflow:hidden; background:var(--card2);
+  display:flex; align-items:center; justify-content:center;
+  transition:border-color 0.2s, box-shadow 0.2s;
+  position:relative;
+}
+.officer-card:hover .officer-photo {
+  border-color:var(--accent2);
+  box-shadow:0 0 14px rgba(0,207,255,0.35);
+}
+.officer-photo img {
+  width:100%; height:100%; object-fit:cover; display:block;
+}
+.officer-photo .initials {
+  font-family:'Orbitron',monospace;
+  font-size:1.2rem; font-weight:700;
+  color:var(--accent2);
+}
+
+.officer-name {
+  font-weight:700; font-size:0.9rem;
+  color:var(--text); margin-bottom:4px; line-height:1.3;
+}
+.officer-id {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.65rem; color:var(--text-muted); margin-bottom:8px;
+}
+.officer-role-badge {
+  display:inline-block;
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.6rem; letter-spacing:0.5px;
+  padding:4px 10px; border-radius:20px;
+  background:linear-gradient(135deg,
+    color-mix(in srgb,var(--accent) 20%,transparent),
+    color-mix(in srgb,var(--accent2) 15%,transparent));
+  color:var(--accent2);
+  border:1px solid color-mix(in srgb,var(--accent2) 35%,transparent);
+  line-height:1.4;
+}
+
+/* Star icon for president */
+.officer-card.is-president .officer-photo {
+  border-color:var(--accent2);
+  box-shadow:0 0 18px rgba(0,207,255,0.3);
+}
+.officer-card.is-president .officer-role-badge {
+  background:linear-gradient(135deg,
+    color-mix(in srgb,var(--accent2) 25%,transparent),
+    color-mix(in srgb,var(--accent) 20%,transparent));
+  border-color:var(--accent2);
+}
+.crown-icon {
+  position:absolute; top:-2px; right:8px;
+  font-size:0.9rem; line-height:1;
+}
+
+/* ---- MEMBERS SECTION ---- */
+.members-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+  gap:1rem;
+}
+
+.student-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:1.25rem 0.85rem;
+  text-align:center; transition:all 0.22s;
+  cursor:default; position:relative;
+}
+.student-card:hover {
+  border-color:var(--accent);
+  background:var(--card2);
+  transform:translateY(-3px);
+  box-shadow:var(--glow);
+}
+
+.student-photo {
+  width:68px; height:68px; border-radius:50%;
+  margin:0 auto 0.75rem;
+  border:2px solid var(--border);
+  overflow:hidden; background:var(--card2);
+  display:flex; align-items:center; justify-content:center;
+  transition:border-color 0.2s;
+}
+.student-card:hover .student-photo { border-color:var(--accent); }
+.student-photo img {
+  width:100%; height:100%; object-fit:cover; display:block;
+}
+.student-photo .initials {
+  font-family:'Orbitron',monospace;
+  font-size:1rem; font-weight:700;
+  color:var(--accent2);
+}
+
+.student-name {
+  font-weight:700; font-size:0.85rem;
+  color:var(--text); margin-bottom:3px; line-height:1.3;
+}
+.student-id {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.63rem; color:var(--text-muted);
+}
+
+/* Count badge */
+.roster-count {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.72rem; color:var(--text-muted);
+  margin-left:auto; align-self:center;
+}
+
+/* No results */
+.no-results {
+  text-align:center; padding:3rem;
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.85rem; color:var(--text-muted);
+  grid-column:1/-1;
+}
+
+/* Adviser card */
+.adviser-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:1.75rem;
+  display:flex; gap:1.5rem; align-items:center;
+  margin-bottom:2rem; position:relative; overflow:hidden;
+  transition:border-color 0.2s;
+}
+.adviser-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);
+}
+.adviser-photo {
+  width:90px; height:90px; border-radius:50%; flex-shrink:0;
+  border:2px solid var(--accent); overflow:hidden;
+  background:var(--card2);
+  display:flex; align-items:center; justify-content:center;
+}
+.adviser-photo img { width:100%; height:100%; object-fit:cover; }
+.adviser-photo .initials {
+  font-family:'Orbitron',monospace;
+  font-size:1.4rem; font-weight:700; color:var(--accent2);
+}
+.adviser-info h3 {
+  font-family:'Orbitron',monospace;
+  font-size:1rem; color:var(--text);
+  letter-spacing:1px; margin-bottom:4px;
+}
+.adviser-info .role {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.75rem; color:var(--accent2); margin-bottom:8px;
+}
+.adviser-info p {
+  font-size:0.9rem; color:var(--text-muted); line-height:1.6;
+}
+
+/* Divider */
+.section-divider {
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:2.5rem 0;
+}
+
+/* Responsive */
+@media(max-width:600px){
+  .adviser-card { flex-direction:column; text-align:center; }
+  .officers-grid { grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); }
+  .members-grid  { grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-img">
+      <img src="logo.jpg" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <span style="display:none">M</span>
+    </div>
+    <div class="nav-brand">MAUCHLY <span>BSIT · 2025-2026</span></div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html" class="active">About</a>
+      
+      <a href="bloopers.html">🤪🤪</a>
+    </div>
+    <div class="theme-switcher">
+      <button class="theme-btn t-dark"   data-theme="dark"   title="Dark"></button>
+      <button class="theme-btn t-purple" data-theme="purple" title="Purple"></button>
+      <button class="theme-btn t-white"  data-theme="white"  title="White"></button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <h1>ABOUT MAUCHLY</h1>
+  <p>💜</p>
+</div>
+
+<div class="section-container">
+
+  <!-- About Cards -->
+  <div class="info-card fade-up">
+    <h2>Our Section</h2>
+    <p>
+      Section Mauchly is named after <strong>John William Mauchly</strong> (1907–1980) —
+      an American physicist and computing pioneer who co-designed <em>ENIAC</em>
+      (Electronic Numerical Integrator and Computer) alongside J. Presper Eckert.
+      ENIAC, completed in 1945, is widely regarded as one of the world's first
+      general-purpose electronic computers. Like our namesake, we are a section
+      driven by innovation, problem-solving, and a shared passion for technology.
+    </p>
+  </div>
+
+  <div class="info-card fade-up">
+    <h2>Our Mission</h2>
+    <p>
+      To build a collaborative and inclusive learning community where every student
+      is empowered to grow as a future IT professional — developing competencies in
+      programming, networking, systems design, and beyond, while upholding a culture
+      of academic excellence, integrity, and mutual respect.
+    </p>
+  </div>
+
+  <!-- Adviser -->
+  <div class="section-label">Adviser</div>
+  <div class="adviser-card fade-up">
+    <div class="adviser-photo">
+      <img src="images/adviser.jpg" alt="Adviser"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <span class="initials" style="display:none">AD</span>
+    </div>
+    <div class="adviser-info">
+      <h3>Dean</h3>
+      <div class="role">College of Computer Studies</div>
+      <p>💜</p>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ===== CLASS OFFICERS ===== -->
+  <div class="section-label">Class Officers</div>
+
+  <!-- Group Photo -->
+  <div class="group-photo-wrap fade-up">
+    <img src="group.jpeg" alt="Class Officers Group Photo"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="group-photo-placeholder" style="display:none">
+      <div class="gp-icon">📸</div>
+      <p>// OFFICERS GROUP PHOTO</p>
+      <p style="font-size:0.68rem;opacity:0.5">Place image at: images/officers-group.jpg</p>
+    </div>
+    <div class="group-photo-caption"> Mauchly — Class Officers · BSIT 2025–2026</div>
+  </div>
+
+  <!-- Officers Grid (rendered by JS) -->
+  <div class="officers-grid" id="officers-grid"></div>
+
+  <div class="section-divider"></div>
+
+  <!-- ===== MEMBERS ===== -->
+  <div class="roster-controls">
+    <div class="section-label" style="margin:0"> Students</div>
+    <span class="roster-count" id="member-count"></span>
+  </div>
+
+  <div class="roster-controls">
+    <input class="search-input" type="text" id="search"
+      placeholder="🔍 Search by name or student ID..."
+      oninput="renderMembers()"/>
+    <select class="filter-select" id="filter-role" onchange="renderMembers()">
+      <option value="all">All students</option>
+    </select>
+  </div>
+
+  <div class="members-grid" id="members-grid"></div>
+
+</div>
+
+<footer>
+  ©  Section Mauchly · BSIT · Named after John W. Mauchly, co-inventor of ENIAC
+</footer>
+
+<script src="theme.js"></script>
+<script>
+/*
+  =====================================================
+  HOW TO USE PHOTOS:
+  - Put all photos in the "images/" folder.
+  - For each student/officer, set:
+      photo: "images/filename.jpg"
+  - If photo is "" or missing, stylized initials show instead.
+  - Group photo: save as "images/officers-group.jpg"
+  - Adviser photo: save as "images/adviser.jpg"
+
+  OFFICERS LIST — fill in all roles here.
+  MEMBERS LIST  — fill in all regular members below.
+  =====================================================
+*/
+
+const OFFICERS = [
+  { name:"Princess Grace Patricio", role:"President", photo:"" },
+  { name:"Neri Rose Palma", role:"Vice President", photo:"" },
+  { name:"Lady Mae Sumido", role:"Secretary", photo:"" },
+  { name:"Margarit Panes", role:"Assistant Secretary", photo:"" },
+  { name:"Cheryl Jean Palma", role:"Treasurer", photo:"" },
+  { name:"John Paul Paneza", role:"Assistant Treasurer", photo:"" },
+  { name:"Sedrika Quidava", role:"Auditor", photo:"" },
+  { name:"Kenvie Samentar", role:"Assistant Auditor", photo:"kenvie.jpg" },
+  { name:"Joegie Salutin", role:"P.I.O", photo:"joji.jpeg" },
+  { name:"Desiree Jane Palma", role:"Assistant P.I.O", photo:"" },
+  { name:"Gabriel Kent Parriño", role:"P.C.O 1", photo:"" },
+  { name:"Camille Palomaria", role:"P.C.O 2", photo:"camil.jpeg" },
+  { name:"Ramon Miguel Palmares", role:"P.C.O 1", photo:"ramon.jpeg" },
+  { name:"Maricar Panes", role:"P.C.O 2", photo:"" },
+  { name:"Sam Auda", role:"Sports Coordinator 1", photo:"sam.jpeg" },
+  { name:"John Alfred Santos", role:"Sports Coordinator 2", photo:"" },
+  { name:"Jay Pamonag", role:"Cultural Coordinator 1", photo:"" },
+  { name:"Jenny Quitane", role:"Cultural Coordinator 2", photo:"" },
+  { name:"Reinheart Pecasis", role:"Muse", photo:"" },
+  { name:"Charles Brian Taburna", role:"Escort", photo:"" },
+];
+
+const MEMBERS = [
+  { name: "Rotchel May Palermo", photo: "" },
+  { name: "Desiree Jane Palma", photo: "" },
+  { name: "Neri Rose Palma", photo: "" },
+  { name: "Ramon Miguel Palmares", photo: "ramon.jpeg" },
+  { name: "Kenneth Palmes", photo: "" },
+  { name: "Camille Rose Palomaria", photo: "" },
+  { name: "John Rey Palomo", photo: "" },
+  { name: "Reniel Palomo", photo: "" },
+  { name: "Cherryl Jean Pama", photo: "" },
+  { name: "Jay Pamonag", photo: "" },
+  { name: "Lyka Panes", photo: "" },
+  { name: "Margarit Panes", photo: "" },
+  { name: "Maricar Panes", photo: "maricar.jpeg" },
+  { name: "Jhon Paul Paneza", photo: "" },
+  { name: "AJ Novee Paniza", photo: "" },
+  { name: "Gabriel Kent Parreño", photo: "" },
+  { name: "Princess Grace Patricio", photo: "" },
+  { name: "Reinhearth Pecasis", photo: "" },
+  { name: "Lynbell Grace Penora", photo: "lyn.jpeg" },
+  { name: "Jhon David Poblador", photo: "david.jpeg" },
+  { name: "Charmie May Quibingco", photo: "" },
+  { name: "Sedrika Quidan", photo: "" },
+  { name: "Jenny Quitane", photo: "" },
+  { name: "Sam Ruda", photo: "" },
+  { name: "Joegie Salutin", photo: "joji.jpeg" },
+  { name: "Kenvie Samentar", photo: "kenvie.jpg" },
+  { name: "Devine Grace Sampiano", photo: "" },
+  { name: "Lyca Santero", photo: "" },
+  { name: "John Alfred Santos", photo: "" },
+  { name: "Lay Mae Sumido", photo: "" },
+  { name: "Charles Brian Taberna", photo: "" },
+  { name: "Dianna Tuarez", photo: "" },
+  { name: "Robert Tumale", photo: "" },
+  { name: "Ed Erlje Vargas", photo: "" },
+  { name: "Justine Mae Villalobos", photo: "" },
+];
+
+/* --- Helpers --- */
+function initials(name) {
+  return name.replace(/\[|\]/g,'').split(' ')
+    .filter(w => w.length > 0).map(w => w[0].toUpperCase()).join('').slice(0,2) || '?';
+}
+
+function photoOrInitials(photo, name, size) {
+  if (photo) {
+    return `<img src="${photo}" alt="${name}"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <span class="initials" style="display:none">${initials(name)}</span>`;
+  }
+  return `<span class="initials">${initials(name)}</span>`;
+}
+
+/* --- Render Officers --- */
+function renderOfficers() {
+  const grid = document.getElementById('officers-grid');
+  grid.innerHTML = OFFICERS.map((s, i) => {
+    const isPresident = s.role === 'President';
+    return `
+      <div class="officer-card${isPresident ? ' is-president' : ''} fade-up"
+           style="animation-delay:${i * 0.05}s">
+        ${isPresident ? '<span class="crown-icon">👑</span>' : ''}
+        <div class="officer-photo">
+          ${photoOrInitials(s.photo, s.name, 84)}
+        </div>
+        <div class="officer-name">${s.name}</div>
+        <div class="officer-role-badge">${s.role}</div>
+      </div>`;
+  }).join('');
+}
+
+/* --- Render Members --- */
+function renderMembers() {
+  const q    = document.getElementById('search').value.toLowerCase().trim();
+  const grid = document.getElementById('members-grid');
+  const countEl = document.getElementById('member-count');
+
+  const filtered = MEMBERS.filter(s =>
+    s.name.toLowerCase().includes(q) 
+  );
+
+  countEl.textContent = `${filtered.length} / ${MEMBERS.length} students`;
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="no-results">No students found.</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map((s, i) => `
+    <div class="student-card fade-up" style="animation-delay:${i * 0.03}s">
+      <div class="student-photo">
+        ${photoOrInitials(s.photo, s.name, 68)}
+      </div>
+      <div class="student-name">${s.name}</div>
+    </div>`
+  ).join('');
+}
+
+/* --- Init --- */
+renderOfficers();
+renderMembers();
+</script>
+</body>
+</html>

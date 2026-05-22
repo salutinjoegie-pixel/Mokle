@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>uwaaa — Section Mauchly</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+/* ===== BLOOPERS-SPECIFIC STYLES ===== */
+
+.bloopers-intro {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:1.75rem; margin-bottom:2.5rem;
+  text-align:center; position:relative; overflow:hidden;
+}
+.bloopers-intro::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);
+}
+.bloopers-intro p {
+  color:color-mix(in srgb,var(--text) 70%,transparent);
+  line-height:1.75; font-size:1rem;
+}
+
+/* Bloopers masonry-style grid */
+.bloopers-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+  gap:1.25rem;
+}
+
+.blooper-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; overflow:hidden;
+  transition:all 0.25s; cursor:default;
+}
+.blooper-card:hover {
+  border-color:var(--accent);
+  transform:translateY(-4px);
+  box-shadow:var(--glow);
+}
+
+/* Photo area */
+.blooper-photo {
+  width:100%; aspect-ratio:4/3;
+  overflow:hidden; position:relative;
+  background:var(--bg3);
+  display:flex; align-items:center; justify-content:center;
+  border-bottom:1px solid var(--border);
+}
+.blooper-photo img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform 0.3s;
+}
+.blooper-card:hover .blooper-photo img {
+  transform:scale(1.04);
+}
+.blooper-placeholder {
+  display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+  color:var(--text-muted);
+}
+.blooper-placeholder .emoji { font-size:3rem; opacity:0.5; }
+.blooper-placeholder .hint {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.65rem; letter-spacing:1.5px; opacity:0.4;
+  text-align:center; padding:0 1rem;
+}
+
+/* Caption overlay on hover (only when photo exists) */
+.blooper-photo.has-photo::after {
+  content:attr(data-caption);
+  position:absolute; inset:0;
+  background:color-mix(in srgb,var(--accent) 70%,black);
+  color:#fff; display:flex; align-items:center; justify-content:center;
+  font-family:'Share Tech Mono',monospace; font-size:0.8rem;
+  padding:1rem; text-align:center;
+  opacity:0; transition:opacity 0.3s;
+}
+.blooper-card:hover .blooper-photo.has-photo::after { opacity:1; }
+
+/* Body */
+.blooper-body { padding:1.1rem 1.25rem; }
+.blooper-title {
+  font-weight:700; font-size:0.95rem;
+  color:var(--text); margin-bottom:5px; line-height:1.3;
+}
+.blooper-desc {
+  font-size:0.88rem;
+  color:color-mix(in srgb,var(--text) 60%,transparent);
+  line-height:1.55; margin-bottom:0.65rem;
+}
+.blooper-footer {
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:6px;
+}
+.blooper-tag {
+  display:inline-block;
+  font-family:'Share Tech Mono',monospace; font-size:0.62rem;
+  padding:3px 9px; border-radius:5px;
+  background:color-mix(in srgb,var(--accent) 10%,transparent);
+  color:var(--accent2);
+  border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);
+}
+.blooper-date {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.62rem; color:var(--text-muted);
+}
+
+/* No results */
+.no-bloopers {
+  text-align:center; padding:4rem 2rem;
+  grid-column:1/-1;
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.85rem; color:var(--text-muted);
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-img">
+      <img src="logo.jpg" alt="Logo"
+      
+    </div>
+    <div class="nav-brand">MAUCHLY <span>BSIT · 2025-2026</span></div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+     
+      <a href="bloopers.html" class="active">🤪🤪</a>
+    </div>
+    <div class="theme-switcher">
+      <button class="theme-btn t-dark"   data-theme="dark"   title="Dark"></button>
+      <button class="theme-btn t-purple" data-theme="purple" title="Purple"></button>
+      <button class="theme-btn t-white"  data-theme="white"  title="White"></button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <h1>🤪🤪</h1>
+  <p> the unscripted, unfiltered side of mauchly 😂</p>
+</div>
+
+<div class="section-container">
+
+  <div class="bloopers-intro">
+    <p>
+      Behind every great section are even greater moments of chaos, laughter, and
+      absolutely unplanned memories. Welcome to the <strong>Mauchly Archive</strong> —
+      where no one escapes, everything gets documented, and the cringe lives forever. 📸
+    </p>
+  </div>
+
+  <div class="bloopers-grid" id="bloopers-grid"></div>
+
+</div>
+
+<footer>
+  ©  Section Mauchly · BSIT · Named after John W. Mauchly, co-inventor of ENIAC
+</footer>
+
+<script src="theme.js"></script>
+<script>
+const BLOOPERS = [
+  {
+    photo:   "3.jpg",
+    caption: "wahhhhh"
+  },
+  {
+    photo:   "2.jpg",
+    
+  },
+  {
+    photo:   "4.jpg",
+    
+  },
+  {
+    photo:   "5.jpg",
+    
+  },
+  {
+    photo:   "6.jpg",
+  }, 
+  {
+  photo: "7.jpg",
+  caption: "cutee"
+},
+{
+  photo: "8.jpg",
+  caption: "hala ka 😭"
+},
+{
+  photo: "9.jpg",
+  caption: "prettyyy"
+},
+{
+  photo: "10.jpg",
+  caption: "uyy bagay"
+},
+{
+  photo: "11.jpg",
+  caption: "grabe naman"
+},
+{
+  photo: "12.jpg",
+  caption: "slayy"
+},
+{
+  photo: "13.jpg",
+  caption: "angas 🔥"
+},
+{
+  photo: "14.jpg",
+  caption: "wahhh idol"
+},
+{
+  photo: "15.jpg",
+  caption: "nakaka smile"
+},
+{
+  photo: "16.jpg",
+  caption: "cutie overload"
+},
+{
+  photo: "17.jpg",
+  caption: "sheesh 😳"
+},
+{
+  photo: "18.jpg",
+  caption: "gandaaa"
+},
+{
+  photo: "19.jpg",
+  caption: "wow naman"
+},
+{
+  photo: "20.jpg",
+  caption: "main character"
+},
+{
+  photo: "21.jpeg",
+  caption: "soft vibes"
+},
+{
+  photo: "22.jpeg",
+  caption: "😭❤️"
+},
+{
+  photo: "23.jpg",
+  caption: "ikaw nanaman"
+},
+{
+  photo: "24.jpg",
+  caption: "eyyy"
+},
+{
+  photo: "25.jpg",
+  caption: "galing mo"
+},
+{
+  photo: "26.jpeg",
+  caption: "nakakatuwa"
+},
+{
+  photo: "27.jpg",
+  caption: "solid nito"
+},
+{
+  photo: "28.jpeg",
+  caption: "cute smileee"
+},
+{
+  photo: "29.jpeg",
+  caption: "pogii"
+},
+{
+  photo: "30.jpeg",
+  caption: "✨✨✨"
+},
+{
+  photo: "31.jpeg",
+  caption: "grabeee"
+},
+{
+  photo: "32.jpeg",
+  caption: "akala ko artista"
+},
+{
+  photo: "33.jpeg",
+  caption: "HAHAHAHA"
+},
+{
+  photo: "34.jpeg",
+  caption: "lowkey fav"
+},
+{
+  photo: "35.jpeg",
+  caption: "saur pretty"
+},
+{
+  photo: "36.jpeg",
+  caption: "cute moments"
+},
+{
+  photo: "37.jpeg",
+  caption: "another oneee"
+},
+{
+  photo: "38.jpeg",
+  caption: "perfect shot"
+},
+{
+  photo: "39.jpeg",
+  caption: "uy bagay filter"
+},
+{
+  photo: "40.jpeg",
+  caption: "last na promise 😭"
+}
+];
+
+function renderBloopers(){
+  const grid = document.getElementById('bloopers-grid');
+  if(!BLOOPERS.length){
+    grid.innerHTML='<div class="no-bloopers">No bloopers yet.</div>';
+    return;
+  }
+  
+  grid.innerHTML = BLOOPERS.map(b=>{
+    const hasPhoto = b.photo && b.photo.trim()!=='';
+    
+    // Only generate a card if there is actually a photo to show
+    if (!hasPhoto) return ''; 
+
+    return `
+      <div class="blooper-card image-only">
+        <div class="blooper-photo has-photo" data-caption="${b.caption || ''}">
+          <img src="${b.photo}" alt="${b.caption || 'Blooper Image'}" loading="lazy"/>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+renderBloopers();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Section Mauchly — Home</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+/* ===== HOME-SPECIFIC STYLES ===== */
+
+.hero {
+  min-height: calc(100vh - 62px);
+  display: flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; padding:3rem 2rem;
+  position:relative; overflow:hidden;
+}
+
+/* Animated grid background */
+.hero-grid {
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(var(--hero-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--hero-grid) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black, transparent);
+  animation: gridPulse 6s ease-in-out infinite;
+}
+@keyframes gridPulse {
+  0%,100% { opacity:0.7; } 50% { opacity:1; }
+}
+
+/* Glow orb */
+.hero-glow {
+  position:absolute; width:700px; height:700px; border-radius:50%;
+  background:radial-gradient(circle,
+    color-mix(in srgb,var(--accent) 15%,transparent) 0%,
+    transparent 70%);
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  pointer-events:none; animation:orbPulse 5s ease-in-out infinite;
+}
+@keyframes orbPulse {
+  0%,100% { transform:translate(-50%,-50%) scale(1); }
+  50%      { transform:translate(-50%,-50%) scale(1.08); }
+}
+
+.hero-content { position:relative; z-index:1; }
+
+/* Section photo / logo area */
+.hero-logo {
+  width:120px; height:120px; border-radius:50%;
+  border:3px solid var(--accent); margin:0 auto 1.5rem;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--card);
+  box-shadow: var(--glow);
+  overflow:hidden; position:relative;
+}
+.hero-logo img { width:100%; height:100%; object-fit:cover; display:block; }
+.hero-logo .placeholder-text {
+  font-family:'Orbitron',monospace; font-size:0.6rem;
+  color:var(--text-muted); text-align:center; padding:8px;
+  line-height:1.4;
+}
+
+.hero-tag {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.72rem; color:var(--accent2);
+  letter-spacing:3px; text-transform:uppercase;
+  margin-bottom:1rem; padding:6px 16px;
+  border:1px solid var(--tag-border);
+  border-radius:20px; display:inline-block;
+  background:var(--tag-bg);
+}
+
+.hero-title {
+  font-family:'Orbitron',monospace;
+  font-size:clamp(2.8rem,9vw,5.5rem);
+  font-weight:900; color:var(--text); line-height:1;
+  margin-bottom:0.4rem;
+  text-shadow: 0 0 50px color-mix(in srgb,var(--accent) 40%,transparent);
+}
+.hero-title .accent { color:var(--accent2); }
+
+.hero-subtitle {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.85rem; color:var(--text-muted);
+  letter-spacing:2px; margin-bottom:1.5rem;
+}
+
+.hero-desc {
+  max-width:520px; margin:0 auto 2.5rem;
+  font-size:1.05rem;
+  color:color-mix(in srgb,var(--text) 65%,transparent);
+  line-height:1.75;
+}
+
+.hero-btns {
+  display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;
+}
+
+/* Stats bar */
+.hero-stats {
+  display:flex; gap:4rem; justify-content:center;
+  margin-top:5rem; padding-top:3rem;
+  border-top:1px solid var(--border);
+  position:relative; z-index:1; flex-wrap:wrap;
+}
+.stat-item { text-align:center; }
+.stat-num {
+  font-family:'Orbitron',monospace;
+  font-size:2.2rem; color:var(--accent2); font-weight:900;
+}
+.stat-label {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.68rem; color:var(--text-muted);
+  letter-spacing:2px; text-transform:uppercase; margin-top:4px;
+}
+
+/* Section photo strip */
+.section-photo {
+  width:100%; max-width:1040px; margin:0 auto;
+  padding:3rem 2rem;
+}
+.section-photo-frame {
+  width:100%; border-radius:16px; overflow:hidden;
+  border:1px solid var(--border);
+  background:var(--card);
+  aspect-ratio:16/6;
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+}
+.section-photo-frame img {
+  width:100%; height:100%; object-fit:cover; display:block;
+}
+.photo-placeholder {
+  display:flex; flex-direction:column; align-items:center;
+  gap:0.75rem; color:var(--text-muted);
+}
+.photo-placeholder .icon {
+  font-size:3rem; opacity:0.4;
+}
+.photo-placeholder p {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.8rem; letter-spacing:2px; opacity:0.5;
+}
+.photo-label {
+  position:absolute; bottom:12px; left:50%; transform:translateX(-50%);
+  font-family:'Share Tech Mono',monospace; font-size:0.7rem;
+  color:var(--text-muted); background:var(--bg);
+  padding:4px 14px; border-radius:20px; border:1px solid var(--border);
+}
+
+/* Quick nav cards */
+.quick-nav {
+  max-width:1040px; margin:0 auto;
+  padding:1rem 2rem 5rem;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1rem;
+}
+.qcard {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:1.75rem 1.5rem;
+  text-decoration:none; color:var(--text);
+  transition:all 0.25s; display:block; position:relative; overflow:hidden;
+}
+.qcard::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,
+    color-mix(in srgb,var(--accent) 8%,transparent), transparent);
+  opacity:0; transition:opacity 0.25s;
+}
+.qcard:hover { border-color:var(--accent); transform:translateY(-3px); }
+.qcard:hover::after { opacity:1; }
+.qcard-icon { font-size:2rem; margin-bottom:0.75rem; }
+.qcard-title {
+  font-family:'Orbitron',monospace; font-size:0.85rem;
+  color:var(--accent2); letter-spacing:2px; margin-bottom:0.4rem;
+}
+.qcard-desc {
+  font-size:0.9rem; color:var(--text-muted); line-height:1.5;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-img" id="nav-logo-wrap">
+      <img src="logo.jpg" alt="Mauchly Logo"/>
+    </div>
+    <div class="nav-brand">MAUCHLY <span>BSIT · 2025–2026</span></div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="about.html">About</a>
+      
+      <a href="bloopers.html">Bloopers</a>
+    </div>
+    <div class="theme-switcher">
+      <button class="theme-btn t-dark"   data-theme="dark"   title="Dark theme"></button>
+      <button class="theme-btn t-purple" data-theme="purple" title="Purple theme"></button>
+      <button class="theme-btn t-white"  data-theme="white"  title="White theme"></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content fade-up">
+
+    <div class="hero-logo">
+      <img src="logo.jpg" alt="Mauchly Logo"/>
+    </div>
+
+    <div class="hero-tag">BSIT · Section Mauchly · A.Y. 2025–2026</div>
+    <div class="hero-title">SECTION<br><span class="accent">MAUCHLY</span></div>
+    <div class="hero-subtitle">// BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY</div>
+    <p class="hero-desc">
+      Named after <strong>John William Mauchly</strong> — co-inventor of ENIAC,
+      one of the world's first general-purpose computers. We carry that legacy of
+      innovation, curiosity, and excellence forward.
+    </p>
+    <div class="hero-btns">
+      <a href="about.html" class="btn-primary">Meet the Section</a>
+      <a href="awardees.html" class="btn-outline">View Awardees</a>
+    </div>
+  </div>
+
+  <div class="hero-stats fade-up">
+    <div class="stat-item">
+      <div class="stat-num">40</div>
+      <div class="stat-label">Students</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">8</div>
+      <div class="stat-label">Dean's Listers</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">2024</div>
+      <div class="stat-label">School Year</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">1st</div>
+      <div class="stat-label">Year Level</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION CLASS PHOTO -->
+<div class="section-photo">
+  <div class="section-photo-frame">
+    <img src="1.jpg" alt="Section Mauchly Class Photo"/>
+    <div class="photo-label">Section Mauchly — A.Y. 2025-2026</div>
+  </div>
+</div>
+
+
+<!-- QUICK NAV CARDS -->
+<div class="quick-nav">
+  <a href="about.html" class="qcard">
+    <div class="qcard-icon">👥</div>
+    <div class="qcard-title">About & Roster</div>
+    <div class="qcard-desc">Learn about our section and meet all 40 students.</div>
+  </a>
+  <a href="awardees.html" class="qcard">
+    <div class="qcard-icon">🏆</div>
+    <div class="qcard-title">Awardees</div>
+    <div class="qcard-desc">Dean's list honorees and outstanding students.</div>
+  </a>
+  <a href="bloopers.html" class="qcard">
+    <div class="qcard-icon">😂</div>
+    <div class="qcard-title">Bloopers</div>
+    <div class="qcard-desc">The unscripted, unforgettable moments of Mauchly.</div>
+  </a>
+</div>
+
+<footer>
+  © 2024–2025 Section Mauchly · BSIT · Named after John W. Mauchly, co-inventor of ENIAC
+</footer>
+
+<script src="theme.js"></script>
+</body>
+</html>
