@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Awardees — Section Mauchly</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+/* ===== AWARDEES-SPECIFIC STYLES ===== */
+
+/* Award list */
+.award-list { display:flex; flex-direction:column; gap:1rem; }
+
+.award-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:1.25rem 1.5rem;
+  display:flex; align-items:center; gap:1.25rem;
+  transition:border-color 0.2s, transform 0.2s;
+}
+.award-card:hover {
+  border-color:var(--accent);
+  transform:translateX(4px);
+}
+
+/* Rank medal */
+.rank-wrap {
+  min-width:54px; text-align:center; flex-shrink:0;
+}
+.rank-medal {
+  font-family:'Orbitron',monospace;
+  font-size:1.6rem; font-weight:900; line-height:1;
+}
+.gold   { color:#FFD700; }
+.silver { color:#C0C0C0; }
+.bronze { color:#CD7F32; }
+.blue   { color:var(--accent2); }
+
+/* Awardee photo */
+.award-photo {
+  width:60px; height:60px; border-radius:50%; flex-shrink:0;
+  border:2px solid var(--border); overflow:hidden;
+  background:var(--card2);
+  display:flex; align-items:center; justify-content:center;
+}
+.award-photo img { width:100%; height:100%; object-fit:cover; }
+.award-photo .initials {
+  font-family:'Orbitron',monospace;
+  font-size:1rem; font-weight:700; color:var(--accent2);
+}
+
+.award-info { flex:1; }
+.award-name {
+  font-weight:700; font-size:1rem; color:var(--text); margin-bottom:3px;
+}
+.award-detail {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.72rem; color:var(--text-muted);
+}
+
+/* GPA chip */
+.gpa-chip {
+  font-family:'Orbitron',monospace;
+  font-size:1rem; font-weight:700; color:var(--accent2);
+  background:color-mix(in srgb,var(--accent) 12%,transparent);
+  border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);
+  padding:6px 14px; border-radius:8px; flex-shrink:0;
+}
+
+/* Empty state */
+.empty-state {
+  text-align:center; padding:3rem;
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.82rem; color:var(--text-muted);
+}
+
+/* ===== PHOTO GALLERY ===== */
+.gallery-section {
+  margin-top:3rem;
+}
+.gallery-title {
+  font-family:'Orbitron',monospace;
+  font-size:0.8rem; font-weight:700; letter-spacing:2px;
+  text-transform:uppercase; color:var(--text-muted);
+  margin-bottom:1.5rem;
+  display:flex; align-items:center; gap:1rem;
+}
+.gallery-title::after {
+  content:''; flex:1; height:1px; background:var(--border);
+}
+
+.photo-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));
+  gap:1.25rem;
+}
+
+.photo-tile {
+  display:flex; flex-direction:column; align-items:center;
+  gap:0.6rem; text-align:center;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:1.25rem 0.75rem;
+  transition:border-color 0.2s, transform 0.2s;
+}
+.photo-tile:hover {
+  border-color:var(--accent);
+  transform:translateY(-3px);
+}
+
+.photo-frame {
+  width:80px; height:80px; border-radius:50%;
+  overflow:hidden; flex-shrink:0;
+  border:2px solid var(--border);
+  background:var(--card2);
+  display:flex; align-items:center; justify-content:center;
+  transition:border-color 0.2s;
+}
+.photo-tile:hover .photo-frame {
+  border-color:var(--accent);
+}
+.photo-frame img { width:100%; height:100%; object-fit:cover; }
+.photo-frame .p-initials {
+  font-family:'Orbitron',monospace;
+  font-size:1.2rem; font-weight:700; color:var(--accent2);
+}
+
+.photo-name {
+  font-family:'Rajdhani',sans-serif;
+  font-weight:700; font-size:0.85rem;
+  color:var(--text); line-height:1.2;
+}
+.photo-gpa {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.7rem; color:var(--text-muted);
+}
+.photo-rank {
+  font-family:'Orbitron',monospace;
+  font-size:0.75rem; font-weight:700;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-img">
+       <img src="logo.jpg" alt="Logo"
+      
+    </div>
+    <div class="nav-brand">MAUCHLY <span>BSIT · 2025-2026</span></div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="awardees.html" class="active">Awardees</a>
+      <a href="bloopers.html">🤪🤪</a>
+    </div>
+    <div class="theme-switcher">
+      <button class="theme-btn t-dark"   data-theme="dark"   title="Dark"></button>
+      <button class="theme-btn t-purple" data-theme="purple" title="Purple"></button>
+      <button class="theme-btn t-white"  data-theme="white"  title="White"></button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <h1>AWARDEES</h1>
+  <p>recognizing excellence in section mauchly</p>
+</div>
+
+<div class="section-container">
+
+  <!-- Info card -->
+  <div class="info-card" style="margin-bottom:1.5rem;">
+    <h2>Dean's List</h2>
+    <p>
+      Students who achieved a GPA of <strong>2.00 or higher</strong> with no failing
+      grades and no incomplete marks for the semester are recognized as Dean's List
+      honorees. This is one of the highest academic honors in our college.
+    </p>
+  </div>
+
+  <!-- Dean's List -->
+  <div class="award-list" id="list-deanslist"></div>
+
+  <!-- Photo Gallery -->
+  <div class="gallery-section">
+    <div class="gallery-title">Awardees Photo Gallery</div>
+    <div class="photo-grid" id="photo-grid"></div>
+  </div>
+
+</div>
+
+<footer>
+  ©  Section Mauchly · BSIT · Named after John W. Mauchly, co-inventor of ENIAC
+</footer>
+
+<script src="theme.js"></script>
+<script>
+/*
+  =====================================================
+  HOW TO ADD AWARDEES:
+  - Fill in name, gpa, sem fields below.
+  - photo: path to image, e.g. "images/juan.jpg"
+    Leave photo:"" to show initials instead.
+  - Add or remove entries freely — the page auto-renders.
+  =====================================================
+*/
+
+/* ---- DEAN'S LIST ---- */
+const DEANS_LIST = [
+  { name:"[Student Name]", gpa:"1.25", sem:"1st Semester 2024–2025", photo:"" },
+  { name:"[Student Name]", gpa:"1.50", sem:"1st Semester 2024–2025", photo:"" },
+  { name:"[Student Name]", gpa:"1.50", sem:"1st Semester 2024–2025", photo:"" },
+  { name:"[Student Name]", gpa:"1.75", sem:"1st Semester 2024–2025", photo:"" },
+  { name:"[Student Name]", gpa:"1.75", sem:"1st Semester 2024–2025", photo:"" },
+  { name:"[Student Name]", gpa:"2.00", sem:"1st Semester 2024–2025", photo:"" },
+  { name:"[Student Name]", gpa:"2.00", sem:"1st Semester 2024–2025", photo:"" },
+  { name:"[Student Name]", gpa:"2.00", sem:"1st Semester 2024–2025", photo:"" },
+];
+
+/* ---- HELPERS ---- */
+function initials(name){
+  return name.replace(/\[|\]/g,'').split(' ')
+    .filter(w=>w.length>0).map(w=>w[0].toUpperCase()).join('').slice(0,2)||'?';
+}
+
+const MEDAL_CLASS = ['gold','silver','bronze','blue','blue','blue','blue','blue'];
+const MEDAL_LABEL = ['#1','#2','#3','#4','#5','#6','#7','#8'];
+
+/* ---- RENDER LIST ---- */
+function renderDeanslist(){
+  const list = document.getElementById('list-deanslist');
+  if(!DEANS_LIST.length){
+    list.innerHTML='<div class="empty-state">No Dean\'s List entries yet. Add them in the DEANS_LIST array.</div>';
+    return;
+  }
+  list.innerHTML = DEANS_LIST.map((d,i)=>`
+    <div class="award-card">
+      <div class="rank-wrap">
+        <div class="rank-medal ${MEDAL_CLASS[i]||'blue'}">${MEDAL_LABEL[i]||'#'+(i+1)}</div>
+      </div>
+      <div class="award-photo">
+        ${d.photo
+          ? `<img src="${d.photo}" alt="${d.name}"/>`
+          : `<span class="initials">${initials(d.name)}</span>`}
+      </div>
+      <div class="award-info">
+        <div class="award-name">${d.name}</div>
+        <div class="award-detail">${d.sem} · Dean's List</div>
+      </div>
+      <div class="gpa-chip">GPA ${d.gpa}</div>
+    </div>`).join('');
+}
+
+/* ---- RENDER PHOTO GALLERY ---- */
+function renderPhotoGrid(){
+  const grid = document.getElementById('photo-grid');
+  if(!DEANS_LIST.length){
+    grid.innerHTML='<div class="empty-state">No photos yet.</div>';
+    return;
+  }
+  grid.innerHTML = DEANS_LIST.map((d,i)=>`
+    <div class="photo-tile">
+      <div class="photo-frame">
+        ${d.photo
+          ? `<img src="${d.photo}" alt="${d.name}"/>`
+          : `<span class="p-initials">${initials(d.name)}</span>`}
+      </div>
+      <div class="photo-rank ${MEDAL_CLASS[i]||'blue'}">${MEDAL_LABEL[i]||'#'+(i+1)}</div>
+      <div class="photo-name">${d.name}</div>
+      <div class="photo-gpa">GPA ${d.gpa}</div>
+    </div>`).join('');
+}
+
+/* Init */
+renderDeanslist();
+renderPhotoGrid();
+</script>
+</body>
+</html>
