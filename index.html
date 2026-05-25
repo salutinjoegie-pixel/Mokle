@@ -179,62 +179,11 @@
 .qcard-desc {
   font-size:0.9rem; color:var(--text-muted); line-height:1.5;
 }
-
-/* ===== SETTINGS MENU & THEME DROP-DOWN STYLE ===== */
-.settings-container {
-  position: relative;
-  display: inline-block;
-}
-.settings-toggle-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 1.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 5px;
-  transition: color 0.2s, transform 0.3s ease;
-}
-.settings-toggle-btn:hover {
-  color: var(--accent);
-  transform: rotate(45deg);
-}
-.settings-dropdown {
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.75rem;
-  box-shadow: var(--glow);
-  z-index: 100;
-  margin-top: 0.5rem;
-  min-width: 140px;
-}
-.settings-dropdown.open {
-  display: block;
-}
-.dropdown-title {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-.settings-dropdown .theme-switcher {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-start;
-}
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
   <div class="nav-logo">
     <div class="nav-logo-img" id="nav-logo-wrap">
@@ -247,25 +196,16 @@
       <a href="index.html" class="active">Home</a>
       <a href="about.html">About</a>
       <a href="bloopers.html">Gallery</a>
-      
-      <div class="settings-container">
-        <button class="settings-toggle-btn" id="settingsBtn" title="Theme Settings">
-          ⚙️
-        </button>
-        <div class="settings-dropdown" id="settingsDropdown">
-          <div class="dropdown-title">Color Mode</div>
-          <div class="theme-switcher">
-            <button class="theme-btn t-dark"   data-theme="dark"   title="Dark theme"></button>
-            <button class="theme-btn t-purple" data-theme="purple" title="Purple theme"></button>
-            <button class="theme-btn t-white"  data-theme="white"  title="White theme"></button>
-          </div>
-        </div>
-      </div>
-
+    </div>
+    <div class="theme-switcher">
+      <button class="theme-btn t-dark"   data-theme="dark"   title="Dark theme"></button>
+      <button class="theme-btn t-purple" data-theme="purple" title="Purple theme"></button>
+      <button class="theme-btn t-white"  data-theme="white"  title="White theme"></button>
     </div>
   </div>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
   <div class="hero-grid"></div>
   <div class="hero-glow"></div>
@@ -305,6 +245,7 @@
   </div>
 </section>
 
+<!-- SECTION CLASS PHOTO -->
 <div class="section-photo">
   <div class="section-photo-frame">
     <img src="1.jpg" alt="Section Mauchly Class Photo"/>
@@ -313,8 +254,9 @@
 </div>
 
 
+<!-- QUICK NAV CARDS -->
 <div class="quick-nav">
-  <a href="about.html" class="qcard">
+  <a href="bout.html" class="qcard">
     <div class="qcard-icon">👥</div>
     <div class="qcard-title">About </div>
     <div class="qcard-desc">Learn about our section and meet all 35 students.</div>
@@ -324,7 +266,7 @@
     <div class="qcard-title">Awardees</div>
     <div class="qcard-desc">Dean's list honorees and outstanding students.</div>
   </a>
-  <a href="bloopers.html" class="qcard">
+  <a href="loopers.html" class="qcard">
     <div class="qcard-icon">😂</div>
     <div class="qcard-title">gallery</div>
     <div class="qcard-desc">The unscripted, unforgettable moments of Mauchly.</div>
@@ -332,27 +274,9 @@
 </div>
 
 <footer>
-  © 2025–2026 Section Mauchly · BSIT · Named after John W. Mauchly, co-inventor of ENIAC
+  © 2024–2025 Section Mauchly · BSIT · Named after John W. Mauchly, co-inventor of ENIAC
 </footer>
 
 <script src="theme.js"></script>
-<script>
-// Toggle Settings Dropdown Window
-const settingsBtn = document.getElementById('settingsBtn');
-const settingsDropdown = document.getElementById('settingsDropdown');
-const settingsContainer = document.querySelector('.settings-container');
-
-settingsBtn.addEventListener('click', function(e) {
-  e.stopPropagation();
-  settingsDropdown.classList.toggle('open');
-});
-
-// Close options list if user clicks outside of it
-document.addEventListener('click', function(e) {
-  if (settingsContainer && !settingsContainer.contains(e.target)) {
-    settingsDropdown.classList.remove('open');
-  }
-});
-</script>
 </body>
 </html>
