@@ -32,7 +32,7 @@
 .blooper-card {
   background:var(--card); border:1px solid var(--border);
   border-radius:14px; overflow:hidden;
-  transition:all 0.25s; cursor:default;
+  transition:all 0.25s; cursor:pointer;
 }
 .blooper-card:hover {
   border-color:var(--accent);
@@ -66,7 +66,7 @@
   text-align:center; padding:0 1rem;
 }
 
-/* Caption overlay on hover (only when photo exists) */
+/* Caption overlay on hover */
 .blooper-photo.has-photo::after {
   content:attr(data-caption);
   position:absolute; inset:0;
@@ -112,6 +112,73 @@
   grid-column:1/-1;
   font-family:'Share Tech Mono',monospace;
   font-size:0.85rem; color:var(--text-muted);
+}
+
+/* ===== LIGHTBOX ===== */
+.lightbox-overlay {
+  display:none;
+  position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,0.92);
+  align-items:center; justify-content:center;
+  flex-direction:column;
+  padding:1rem;
+}
+.lightbox-overlay.active { display:flex; }
+
+.lightbox-img-wrap {
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+  width:100%; max-width:900px;
+  max-height:80vh;
+}
+.lightbox-overlay img {
+  max-width:100%; max-height:80vh;
+  object-fit:contain;
+  border-radius:10px;
+  display:block;
+}
+.lightbox-caption {
+  margin-top:0.75rem;
+  color:rgba(255,255,255,0.75);
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.85rem;
+  text-align:center;
+  min-height:1.2em;
+}
+.lb-close {
+  position:fixed; top:1rem; right:1.25rem;
+  background:rgba(255,255,255,0.15);
+  border:none; color:#fff;
+  border-radius:50%;
+  width:40px; height:40px;
+  font-size:1.4rem; line-height:40px;
+  text-align:center; cursor:pointer;
+  transition:background 0.2s;
+  z-index:10000;
+}
+.lb-close:hover { background:rgba(255,255,255,0.3); }
+
+.lb-arrow {
+  position:fixed; top:50%; transform:translateY(-50%);
+  background:rgba(255,255,255,0.15);
+  border:none; color:#fff;
+  border-radius:50%;
+  width:44px; height:44px;
+  font-size:1.5rem; cursor:pointer;
+  transition:background 0.2s;
+  z-index:10000;
+  display:flex; align-items:center; justify-content:center;
+}
+.lb-arrow:hover { background:rgba(255,255,255,0.3); }
+.lb-prev { left:1rem; }
+.lb-next { right:1rem; }
+
+.lb-counter {
+  position:fixed; bottom:1.25rem; left:50%; transform:translateX(-50%);
+  color:rgba(255,255,255,0.45);
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.75rem; z-index:10000;
+  letter-spacing:1px;
 }
 </style>
 </head>
@@ -160,186 +227,133 @@
 </div>
 
 <footer>
-  ©  Section Mauchly · BSIT · Named after John W. Mauchly, co-inventor of ENIAC
+  © Section Mauchly · BSIT · Named after John W. Mauchly, co-inventor of ENIAC
 </footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox">
+  <button class="lb-close" id="lb-close">✕</button>
+  <button class="lb-arrow lb-prev" id="lb-prev">&#8249;</button>
+  <div class="lightbox-img-wrap">
+    <img src="" alt="" id="lb-img"/>
+  </div>
+  <div class="lightbox-caption" id="lb-caption"></div>
+  <button class="lb-arrow lb-next" id="lb-next">&#8250;</button>
+  <div class="lb-counter" id="lb-counter"></div>
+</div>
 
 <script src="theme.js"></script>
 <script>
 const BLOOPERS = [
-  {
-    photo:   "3.jpg",
-    caption: "wahhhhh"
-  },
-  {
-    photo:   "2.jpg",
-  },
-  {
-    photo:   "4.jpg",
-  },
-  {
-    photo:   "5.jpg",
-  },
-  {
-    photo:   "6.jpg",
-  }, 
-  {
-    photo: "7.jpg",
-    caption: "cutee"
-  },
-  {
-    photo: "8.jpg",
-    caption: "hala ka 😭"
-  },
-  {
-    photo: "9.jpg",
-    caption: "prettyyy"
-  },
-  {
-    photo: "10.jpg",
-    caption: "uyy bagay"
-  },
-  {
-    photo: "11.jpg",
-    caption: "grabe naman"
-  },
-  {
-    photo: "12.jpg",
-    caption: "slayy"
-  },
-  {
-    photo: "13.jpg",
-    caption: "angas 🔥"
-  },
-  {
-    photo: "14.jpg",
-    caption: "wahhh idol"
-  },
-  {
-    photo: "15.jpg",
-    caption: "nakaka smile"
-  },
-  {
-    photo: "16.jpg",
-    caption: "cutie overload"
-  },
-  {
-    photo: "117.jpg",
-    caption: "sheesh 😳"
-  },
-  {
-    photo: "18.jpg",
-    caption: "gandaaa"
-  },
-  {
-    photo: "19.jpg",
-    caption: "wow naman"
-  },
-  {
-    photo: "20.jpg",
-    caption: "main character"
-  },
-  {
-    photo: "21.jpeg",
-    caption: "soft vibes"
-  },
-  {
-    photo: "22.jpeg",
-    caption: "😭❤️"
-  },
-  {
-    photo: "23.jpg",
-    caption: "ikaw nanaman"
-  },
-  {
-    photo: "24.jpg",
-    caption: "eyyy"
-  },
-  {
-    photo: "25.jpg",
-    caption: "galing mo"
-  },
-  {
-    photo: "26.jpeg",
-    caption: "nakakatuwa"
-  },
-  {
-    photo: "27.jpg",
-    caption: "solid nito"
-  },
-  {
-    photo: "28.jpg",
-    caption: "cute smileee"
-  },
-  {
-    photo: "29.jpeg",
-    caption: "pogii"
-  },
-  {
-    photo: "30.jpeg",
-    caption: "✨✨✨"
-  },
-  {
-    photo: "31.jpeg",
-    caption: "grabeee"
-  },
-  {
-    photo: "32.jpeg",
-    caption: "akala ko artista"
-  },
-  {
-    photo: "33.jpeg",
-    caption: "HAHAHAHA"
-  },
-  {
-    photo: "34.jpeg",
-    caption: "lowkey fav"
-  },
-  {
-    photo: "35.jpeg",
-    caption: "saur pretty"
-  },
-  {
-    photo: "36.jpeg",
-    caption: "cute moments"
-  },
-  {
-    photo: "37.jpeg",
-    caption: "another oneee"
-  },
-  {
-    photo: "38.jpeg",
-    caption: "perfect shot"
-  },
-  {
-    photo: "39.jpeg",
-    caption: "uy bagay filter"
-  },
-  {
-    photo: "40.jpeg",
-    caption: "last na promise 😭"
-  }
+  { photo: "3.jpg",   caption: "wahhhhh" },
+  { photo: "2.jpg" },
+  { photo: "4.jpg" },
+  { photo: "5.jpg" },
+  { photo: "6.jpg" },
+  { photo: "7.jpg",   caption: "cutee" },
+  { photo: "8.jpg",   caption: "hala ka 😭" },
+  { photo: "9.jpg",   caption: "prettyyy" },
+  { photo: "10.jpg",  caption: "uyy bagay" },
+  { photo: "11.jpg",  caption: "grabe naman" },
+  { photo: "12.jpg",  caption: "slayy" },
+  { photo: "13.jpg",  caption: "angas 🔥" },
+  { photo: "14.jpg",  caption: "wahhh idol" },
+  { photo: "15.jpg",  caption: "nakaka smile" },
+  { photo: "16.jpg",  caption: "cutie overload" },
+  { photo: "117.jpg", caption: "sheesh 😳" },
+  { photo: "18.jpg",  caption: "gandaaa" },
+  { photo: "19.jpg",  caption: "wow naman" },
+  { photo: "20.jpg",  caption: "main character" },
+  { photo: "21.jpeg", caption: "soft vibes" },
+  { photo: "22.jpeg", caption: "😭❤️" },
+  { photo: "23.jpg",  caption: "ikaw nanaman" },
+  { photo: "24.jpg",  caption: "eyyy" },
+  { photo: "25.jpg",  caption: "galing mo" },
+  { photo: "26.jpeg", caption: "nakakatuwa" },
+  { photo: "27.jpg",  caption: "solid nito" },
+  { photo: "28.jpg",  caption: "cute smileee" },
+  { photo: "29.jpeg", caption: "pogii" },
+  { photo: "30.jpeg", caption: "✨✨✨" },
+  { photo: "31.jpeg", caption: "grabeee" },
+  { photo: "32.jpeg", caption: "akala ko artista" },
+  { photo: "33.jpeg", caption: "HAHAHAHA" },
+  { photo: "34.jpeg", caption: "lowkey fav" },
+  { photo: "35.jpeg", caption: "saur pretty" },
+  { photo: "36.jpeg", caption: "cute moments" },
+  { photo: "37.jpeg", caption: "another oneee" },
+  { photo: "38.jpeg", caption: "perfect shot" },
+  { photo: "39.jpeg", caption: "uy bagay filter" },
+  { photo: "40.jpeg", caption: "last na promise 😭" }
 ];
 
-function renderBloopers(){
+const photos = BLOOPERS.filter(b => b.photo && b.photo.trim() !== '');
+let currentIndex = 0;
+
+function openLightbox(index) {
+  currentIndex = index;
+  const b = photos[index];
+  document.getElementById('lb-img').src = b.photo;
+  document.getElementById('lb-img').alt = b.caption || '';
+  document.getElementById('lb-caption').textContent = b.caption || '';
+  document.getElementById('lb-counter').textContent = (index + 1) + ' / ' + photos.length;
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function showPrev() {
+  currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+  openLightbox(currentIndex);
+}
+
+function showNext() {
+  currentIndex = (currentIndex + 1) % photos.length;
+  openLightbox(currentIndex);
+}
+
+document.getElementById('lb-close').addEventListener('click', closeLightbox);
+document.getElementById('lb-prev').addEventListener('click', showPrev);
+document.getElementById('lb-next').addEventListener('click', showNext);
+
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) closeLightbox();
+});
+
+document.addEventListener('keydown', function(e) {
+  if (!document.getElementById('lightbox').classList.contains('active')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') showPrev();
+  if (e.key === 'ArrowRight') showNext();
+});
+
+/* Swipe support for mobile */
+let touchStartX = 0;
+document.getElementById('lightbox').addEventListener('touchstart', function(e) {
+  touchStartX = e.changedTouches[0].screenX;
+});
+document.getElementById('lightbox').addEventListener('touchend', function(e) {
+  const diff = touchStartX - e.changedTouches[0].screenX;
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) showNext(); else showPrev();
+  }
+});
+
+function renderBloopers() {
   const grid = document.getElementById('bloopers-grid');
-  if(!BLOOPERS.length){
-    grid.innerHTML='<div class="no-bloopers">No bloopers yet.</div>';
+  if (!photos.length) {
+    grid.innerHTML = '<div class="no-bloopers">No bloopers yet.</div>';
     return;
   }
-  
-  grid.innerHTML = BLOOPERS.map(b=>{
-    const hasPhoto = b.photo && b.photo.trim()!=='';
-    
-    // Only generate a card if there is actually a photo to show
-    if (!hasPhoto) return ''; 
-
-    return `
-      <div class="blooper-card image-only">
-        <div class="blooper-photo has-photo" data-caption="${b.caption || ''}">
-          <img src="${b.photo}" alt="${b.caption || 'Blooper Image'}" loading="lazy"/>
-        </div>
-      </div>`;
-  }).join('');
+  grid.innerHTML = photos.map((b, i) => `
+    <div class="blooper-card image-only" onclick="openLightbox(${i})">
+      <div class="blooper-photo has-photo" data-caption="${b.caption || ''}">
+        <img src="${b.photo}" alt="${b.caption || 'Blooper Image'}" loading="lazy"/>
+      </div>
+    </div>`).join('');
 }
 
 renderBloopers();
