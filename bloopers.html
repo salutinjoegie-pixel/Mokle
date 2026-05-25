@@ -66,18 +66,6 @@
   text-align:center; padding:0 1rem;
 }
 
-/* Caption overlay on hover */
-.blooper-photo.has-photo::after {
-  content:attr(data-caption);
-  position:absolute; inset:0;
-  background:color-mix(in srgb,var(--accent) 70%,black);
-  color:#fff; display:flex; align-items:center; justify-content:center;
-  font-family:'Share Tech Mono',monospace; font-size:0.8rem;
-  padding:1rem; text-align:center;
-  opacity:0; transition:opacity 0.3s;
-}
-.blooper-card:hover .blooper-photo.has-photo::after { opacity:1; }
-
 /* Body */
 .blooper-body { padding:1.1rem 1.25rem; }
 .blooper-title {
@@ -184,7 +172,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">
     <div class="nav-logo-img">
@@ -206,7 +193,6 @@
   </div>
 </nav>
 
-<!-- PAGE HEADER -->
 <div class="page-header">
   <h1>🤪🤪</h1>
   <p> the unscripted, unfiltered side of mauchly 😂</p>
@@ -230,7 +216,6 @@
   © Section Mauchly · BSIT · Named after John W. Mauchly, co-inventor of ENIAC
 </footer>
 
-<!-- LIGHTBOX -->
 <div class="lightbox-overlay" id="lightbox">
   <button class="lb-close" id="lb-close">✕</button>
   <button class="lb-arrow lb-prev" id="lb-prev">&#8249;</button>
@@ -350,8 +335,8 @@ function renderBloopers() {
   }
   grid.innerHTML = photos.map((b, i) => `
     <div class="blooper-card image-only" onclick="openLightbox(${i})">
-      <div class="blooper-photo has-photo" data-caption="${b.caption || ''}">
-        <img src="${b.photo}" alt="${b.caption || 'Blooper Image'}" loading="lazy"/>
+      <div class="blooper-photo">
+        <img src="${b.photo}" alt="Blooper Image" loading="lazy"/>
       </div>
     </div>`).join('');
 }
