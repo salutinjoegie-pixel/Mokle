@@ -8,7 +8,6 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap');
 
-/* ===== MATCH PAGE ===== */
 .match-page {
   min-height: 80vh;
   display: flex;
@@ -18,7 +17,6 @@
   padding: 2rem 1rem;
 }
 
-/* ===== INTRO CARD ===== */
 .match-intro {
   background: var(--card);
   border: 1px solid var(--border);
@@ -69,7 +67,6 @@
   margin-bottom: 1.75rem;
 }
 
-/* Input */
 .match-input-wrap {
   position: relative;
   margin-bottom: 1rem;
@@ -95,7 +92,6 @@
 }
 .match-name-input::placeholder { color: var(--text-muted); font-weight: 400; }
 
-/* Dropdown suggestions */
 .match-suggestions {
   position: absolute;
   top: calc(100% + 6px);
@@ -120,12 +116,16 @@
   transition: background 0.15s;
   text-align: left;
 }
+.match-suggestion-item .gender-tag {
+  font-size: 0.7rem;
+  opacity: 0.6;
+  margin-left: 6px;
+}
 .match-suggestion-item:hover {
   background: color-mix(in srgb, #ff6eb4 12%, transparent);
   color: #ff6eb4;
 }
 
-/* Find button */
 .match-btn {
   width: 100%;
   padding: 14px;
@@ -146,7 +146,6 @@
 }
 .match-btn:active { transform: scale(0.97); }
 
-/* ===== RESULT CARD ===== */
 .match-result {
   display: none;
   max-width: 480px;
@@ -161,7 +160,6 @@
   to   { opacity: 1; transform: scale(1); }
 }
 
-/* Pink bubbly card */
 .result-card {
   background: linear-gradient(145deg, #ffb6d9, #ffd6a5);
   border-radius: 32px;
@@ -171,7 +169,6 @@
   box-shadow: 0 12px 40px rgba(255,110,180,0.35);
 }
 
-/* Confetti dots */
 .result-card::before {
   content: '';
   position: absolute; inset: 0;
@@ -199,7 +196,6 @@
   box-shadow: 0 2px 8px rgba(255,110,180,0.2);
 }
 
-/* Avatars row */
 .result-avatars {
   display: flex;
   align-items: center;
@@ -246,7 +242,6 @@
   50%      { transform: translate(-50%,-50%) scale(1.15); }
 }
 
-/* Names */
 .result-names {
   display: flex;
   align-items: center;
@@ -263,7 +258,6 @@
 }
 .result-heart { font-size: 1.3rem; }
 
-/* Stats row */
 .result-stats {
   display: flex;
   justify-content: center;
@@ -292,7 +286,6 @@
   line-height: 1.1;
 }
 
-/* Compatibility bar */
 .result-compat-wrap {
   position: relative; z-index: 1;
   margin-bottom: 1.25rem;
@@ -324,7 +317,6 @@
   margin-top: 4px;
 }
 
-/* Message bubble */
 .result-message {
   background: rgba(255,255,255,0.6);
   border-radius: 16px;
@@ -338,7 +330,6 @@
   line-height: 1.5;
 }
 
-/* Try again */
 .match-try-again {
   background: #fff;
   color: #ff6eb4;
@@ -357,7 +348,6 @@
   box-shadow: 0 6px 20px rgba(255,110,180,0.4);
 }
 
-/* ===== FLOATING HEARTS ===== */
 .hearts-bg {
   position: fixed; inset: 0;
   pointer-events: none; z-index: 0;
@@ -385,7 +375,6 @@
 </head>
 <body>
 
-<!-- Floating hearts background -->
 <div class="hearts-bg" id="hearts-bg"></div>
 
 <nav>
@@ -419,11 +408,11 @@
 
 <div class="match-page">
 
-  <!-- INTRO / INPUT -->
   <div class="match-intro" id="match-intro">
     <span class="match-big-emoji">💘</span>
     <h1>Find Your Match!</h1>
-    <p>Type your name and the universe will decide who your Mauchly partner is 🔮✨</p>
+    <p>Type your name and the universe will decide who your Mauchly partner is 🔮✨<br>
+    <small style="opacity:0.7">Boys match with girls · Girls match with boys</small></p>
 
     <div class="match-input-wrap">
       <input class="match-name-input" id="match-input"
@@ -439,7 +428,6 @@
     </button>
   </div>
 
-  <!-- RESULT -->
   <div class="match-result" id="match-result">
     <div class="result-card">
       <div class="result-badge" id="result-badge">💘 IT'S A MATCH!</div>
@@ -491,45 +479,60 @@
 
 <script src="theme.js"></script>
 <script>
-// =============================================
-//  STUDENTS LIST — add/remove names freely!
-// =============================================
 const STUDENTS = [
-  "Rotchel May Palermo",
-  "Desiree Jane Palma",
-  "Neri Rose Palma",
-  "Ramon Miguel Palmares",
-  "Kenneth Palmes",
-  "Camille Rose Palomaria",
-  "John Rey Palomo",
-  "Reniel Palomo",
-  "Cherryl Jean Pama",
-  "Jay Pamonag",
-  "Lyka Panes",
-  "Margarit Panes",
-  "Maricar Panes",
-  "Jhon Paul Paneza",
-  "AJ Novee Paniza",
-  "Gabriel Kent Parreño",
-  "Princess Grace Patricio",
-  "Reinhearth Pecasis",
-  "Lynbell Grace Penora",
-  "Jhon David Poblador",
-  "Charmie May Quibingco",
-  "Sedrika Quidan",
-  "Jenny Quitane",
-  "Sam Ruda",
-  "Joegie Salutin",
-  "Kenvie Samentar",
-  "Devine Grace Sampiano",
-  "Lyca Santero",
-  "John Alfred Santos",
-  "Lady Mae Sumido",
-  "Charles Brian Taberna",
-  "Dianna Tuarez",
-  "Robert Tumale",
-  "Ed Erlje Vargas",
-  "Justine Mae Villalobos",
+  // ---- GIRLS ----
+  { name: "Rotchel May Palermo",     gender: "F" },
+  { name: "Desiree Jane Palma",      gender: "F" },
+  { name: "Neri Rose Palma",         gender: "F" },
+  { name: "Camille Rose Palomaria",  gender: "F" },
+  { name: "Cherryl Jean Pama",       gender: "F" },
+  { name: "Lyka Panes",              gender: "F" },
+  { name: "Margarit Panes",          gender: "F" },
+  { name: "Maricar Panes",           gender: "F" },
+  { name: "Princess Grace Patricio", gender: "F" },
+  { name: "Lynbell Grace Penora",    gender: "F" },
+  { name: "Charmie May Quibingco",   gender: "F" },
+  { name: "Sedrika Quidan",          gender: "F" },
+  { name: "Jenny Quitane",           gender: "F" },
+  { name: "Devine Grace Sampiano",   gender: "F" },
+  { name: "Lyca Santero",            gender: "F" },
+  { name: "Lady Mae Sumido",         gender: "F" },
+  { name: "Dianna Tuarez",           gender: "F" },
+  { name: "Justine Mae Villalobos",  gender: "F" },
+  // ---- BOYS ----
+  { name: "Ramon Miguel Palmares",   gender: "M" },
+  { name: "Kenneth Palmes",          gender: "M" },
+  { name: "John Rey Palomo",         gender: "M" },
+  { name: "Reniel Palomo",           gender: "M" },
+  { name: "Jay Pamonag",             gender: "M" },
+  { name: "Jhon Paul Paneza",        gender: "M" },
+  { name: "AJ Novee Paniza",         gender: "M" },
+  { name: "Gabriel Kent Parreño",    gender: "M" },
+  { name: "Reinhearth Pecasis",      gender: "M" },
+  { name: "Jhon David Poblador",     gender: "M" },
+  { name: "Sam Ruda",                gender: "M" },
+  { name: "Joegie Salutin",          gender: "M" },
+  { name: "Kenvie Samentar",         gender: "M" },
+  { name: "John Alfred Santos",      gender: "M" },
+  { name: "Charles Brian Taberna",   gender: "M" },
+  { name: "Robert Tumale",           gender: "M" },
+  { name: "Ed Erlje Vargas",         gender: "M" },
+];
+
+// Special destined pairs — always on first roll, compat locked
+const SPECIAL_PAIRS = [
+  {
+    a: "charles brian taberna",
+    b: "camille rose palomaria",
+    compat: 99,
+    message: "Destined. The universe didn't even hesitate on this one 💘✨"
+  },
+  {
+    a: "jhon paul paneza",
+    b: "kenvie samentar",
+    compat: 98,
+    message: "Some matches are just written in the stars fr 🌟💕"
+  },
 ];
 
 const MESSAGES = [
@@ -574,12 +577,13 @@ function filterSuggestions() {
   const box  = document.getElementById('match-suggestions');
   if (!val) { box.classList.remove('open'); return; }
 
-  const matches = STUDENTS.filter(s => s.toLowerCase().includes(val));
+  const matches = STUDENTS.filter(s => s.name.toLowerCase().includes(val));
   if (!matches.length) { box.classList.remove('open'); return; }
 
   box.innerHTML = matches.slice(0, 6).map(s =>
-    `<div class="match-suggestion-item" onclick="selectName('${s.replace(/'/g,"\\'")}')">
-      ${s}
+    `<div class="match-suggestion-item" onclick="selectName('${s.name.replace(/'/g,"\\'")}')">
+      ${s.name}
+      <span class="gender-tag">${s.gender === 'F' ? '♀' : '♂'}</span>
     </div>`
   ).join('');
   box.classList.add('open');
@@ -600,82 +604,95 @@ document.addEventListener('click', function(e) {
   }
 });
 
-/* ===== INITIALS ===== */
+/* ===== HELPERS ===== */
 function getInitials(name) {
   return name.split(' ').filter(w => w).map(w => w[0].toUpperCase()).join('').slice(0, 2);
 }
 
-/* ===== SEEDED RANDOM (same pair = same result) ===== */
-function seededRandom(seed) {
-  let s = seed;
-  return function() {
-    s = (s * 1664525 + 1013904223) & 0xffffffff;
-    return (s >>> 0) / 0xffffffff;
-  };
-}
-
-function hashStr(str) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) - hash) + str.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash);
+// True random integer in [min, max]
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 /* ===== FIND MATCH ===== */
 function findMatch() {
-  const input = document.getElementById('match-input').value.trim();
-  if (!input) {
-    document.getElementById('match-input').style.borderColor = '#ff6eb4';
-    document.getElementById('match-input').placeholder = 'Please enter your name first! 🥺';
+  const raw = document.getElementById('match-input').value.trim();
+  if (!raw) {
+    const inp = document.getElementById('match-input');
+    inp.style.borderColor = '#ff6eb4';
+    inp.placeholder = 'Please enter your name first! 🥺';
     setTimeout(() => {
-      document.getElementById('match-input').style.borderColor = '';
-      document.getElementById('match-input').placeholder = 'Type your name here...';
+      inp.style.borderColor = '';
+      inp.placeholder = 'Type your name here...';
     }, 2000);
     return;
   }
 
-  // Find closest matching student name or use as-is
-  const lowerInput = input.toLowerCase();
-  let playerName = STUDENTS.find(s => s.toLowerCase() === lowerInput)
-    || STUDENTS.find(s => s.toLowerCase().includes(lowerInput))
-    || input;
+  const lowerInput = raw.toLowerCase();
+  const matched = STUDENTS.find(s => s.name.toLowerCase() === lowerInput)
+               || STUDENTS.find(s => s.name.toLowerCase().includes(lowerInput));
+  const playerName   = matched ? matched.name : raw;
+  const lowerPlayer  = playerName.toLowerCase().trim();
+  const playerGender = matched ? matched.gender : null;
 
-  // Pick a partner (not themselves) using seeded random for consistency
-  const seed   = hashStr(playerName.toLowerCase());
-  const rng    = seededRandom(seed);
-  const others = STUDENTS.filter(s => s.toLowerCase() !== playerName.toLowerCase());
-  const partner = others[Math.floor(rng() * others.length)];
+  // --- Check special pairs (compat stays fixed) ---
+  for (const sp of SPECIAL_PAIRS) {
+    if (lowerPlayer === sp.a || lowerPlayer === sp.b) {
+      const partnerKey = lowerPlayer === sp.a ? sp.b : sp.a;
+      const partnerObj = STUDENTS.find(s => s.name.toLowerCase() === partnerKey);
+      if (partnerObj) {
+        renderResult(playerName, partnerObj.name, sp.compat, sp.message);
+        return;
+      }
+    }
+  }
 
-  // Random stats (seeded so same pair = same stats)
-  const compat = Math.floor(rng() * 35) + 65; // 65–99%
-  const days   = Math.floor(rng() * 150) + 30;
-  const vibes  = Math.floor(rng() * 900) + 100;
-  const msg    = MESSAGES[Math.floor(rng() * MESSAGES.length)];
+  // --- Opposite-gender pool ---
+  let pool = STUDENTS.filter(s => {
+    if (s.name.toLowerCase() === lowerPlayer) return false;
+    if (playerGender && s.gender === playerGender) return false;
+    return true;
+  });
 
-  // Populate result
+  // Fallback if roster somehow has no opposite gender
+  if (!pool.length) {
+    pool = STUDENTS.filter(s => s.name.toLowerCase() !== lowerPlayer);
+  }
+
+  // Fully random pick every time
+  const partnerObj = pool[Math.floor(Math.random() * pool.length)];
+  const compat     = randInt(65, 99);
+  const msg        = MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
+
+  renderResult(playerName, partnerObj.name, compat, msg);
+}
+
+/* ===== RENDER ===== */
+function renderResult(playerName, partnerName, compat, msg) {
+  const days  = randInt(30, 179);
+  const vibes = randInt(100, 999);
+
   document.getElementById('avatar1').textContent = getInitials(playerName);
-  document.getElementById('avatar2').textContent = getInitials(partner);
+  document.getElementById('avatar2').textContent = getInitials(partnerName);
   document.getElementById('name1').textContent   = playerName.split(' ')[0];
-  document.getElementById('name2').textContent   = partner.split(' ')[0];
+  document.getElementById('name2').textContent   = partnerName.split(' ')[0];
   document.getElementById('stat-days').textContent  = days;
   document.getElementById('stat-vibes').textContent = vibes;
   document.getElementById('result-message').textContent = msg;
   document.getElementById('compat-pct').textContent = compat + '% compatible 💖';
 
-  // Show
-  document.getElementById('match-intro').style.display  = 'none';
-  document.getElementById('match-result').classList.add('show');
+  document.getElementById('match-intro').style.display = 'none';
+  const resultEl = document.getElementById('match-result');
+  resultEl.classList.remove('show');
+  void resultEl.offsetWidth;
+  resultEl.classList.add('show');
 
-  // Animate compatibility bar
+  document.getElementById('compat-bar').style.width = '0%';
   setTimeout(() => {
     document.getElementById('compat-bar').style.width = compat + '%';
   }, 300);
 
-  // Burst more hearts
   spawnHearts();
-
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
