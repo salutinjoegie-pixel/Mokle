@@ -6,8 +6,116 @@
 <title>uwaaa — Section Mauchly</title>
 <link rel="stylesheet" href="style.css"/>
 <style>
-/* ===== BLOOPERS-SPECIFIC STYLES ===== */
+/* ===== ALBUMS VIEW (iOS-style) ===== */
+.albums-view { display:block; }
+.albums-view-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:0.5rem;
+}
+.albums-section-label {
+  font-size:1.25rem; font-weight:700; color:var(--text);
+  margin-bottom:1.25rem; margin-top:0.5rem;
+}
+.albums-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));
+  gap:1.5rem 1.25rem;
+  margin-bottom:2.5rem;
+}
+.album-cover-card {
+  cursor:pointer; background:none; border:none; padding:0;
+  text-align:left;
+  transition:opacity 0.18s;
+}
+.album-cover-card:hover { opacity:0.82; }
+.album-cover-thumb {
+  width:100%; aspect-ratio:1/1;
+  border-radius:14px;
+  overflow:hidden;
+  background:var(--card);
+  border:1px solid var(--border);
+  position:relative;
+}
+.album-cover-thumb img {
+  width:100%; height:100%; object-fit:cover; display:block;
+}
+.album-cover-placeholder {
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:2.5rem; opacity:0.3;
+}
+.album-cover-name {
+  font-weight:700; font-size:0.95rem;
+  color:var(--text); margin-top:0.55rem;
+  line-height:1.25;
+}
+.album-cover-count {
+  font-size:0.82rem;
+  color:var(--text-muted);
+  margin-top:2px;
+}
 
+/* ===== PHOTOS VIEW ===== */
+.photos-view { display:none; }
+.photos-view.active { display:block; }
+.albums-view.hidden { display:none; }
+
+.back-btn {
+  display:inline-flex; align-items:center; gap:6px;
+  background:none; border:none; cursor:pointer;
+  color:var(--accent2); font-size:1rem;
+  font-family:inherit; padding:0;
+  margin-bottom:1.5rem;
+  transition:opacity 0.18s;
+}
+.back-btn:hover { opacity:0.7; }
+.back-btn svg { width:18px; height:18px; }
+
+.photos-album-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:1.25rem; flex-wrap:wrap; gap:0.5rem;
+}
+.photos-album-title {
+  font-size:1.4rem; font-weight:700; color:var(--text);
+}
+.photos-album-count {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.7rem; color:var(--text-muted);
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:3px 10px; border-radius:6px;
+}
+
+/* ===== PHOTO GRID ===== */
+.bloopers-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));
+  gap:4px;
+}
+.blooper-card {
+  aspect-ratio:1/1;
+  overflow:hidden; cursor:pointer;
+  background:var(--card);
+  position:relative;
+}
+.blooper-card img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform 0.25s;
+}
+.blooper-card:hover img { transform:scale(1.06); }
+.blooper-card .caption-hover {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:0.4rem 0.6rem;
+  background:linear-gradient(transparent, rgba(0,0,0,0.6));
+  color:#fff;
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.7rem;
+  opacity:0; transition:opacity 0.2s;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.blooper-card:hover .caption-hover { opacity:1; }
+
+/* ===== INTRO ===== */
 .bloopers-intro {
   background:var(--card); border:1px solid var(--border);
   border-radius:14px; padding:1.75rem; margin-bottom:2.5rem;
@@ -22,151 +130,57 @@
   line-height:1.75; font-size:1rem;
 }
 
-/* Bloopers masonry-style grid */
-.bloopers-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
-  gap:1.25rem;
-}
-
-.blooper-card {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:14px; overflow:hidden;
-  transition:all 0.25s; cursor:pointer;
-}
-.blooper-card:hover {
-  border-color:var(--accent);
-  transform:translateY(-4px);
-  box-shadow:var(--glow);
-}
-
-/* Photo area */
-.blooper-photo {
-  width:100%; aspect-ratio:4/3;
-  overflow:hidden; position:relative;
-  background:var(--bg3);
-  display:flex; align-items:center; justify-content:center;
-  border-bottom:1px solid var(--border);
-}
-.blooper-photo img {
-  width:100%; height:100%; object-fit:cover; display:block;
-  transition:transform 0.3s;
-}
-.blooper-card:hover .gallery-photo img {
-  transform:scale(1.04);
-}
-.blooper-placeholder {
-  display:flex; flex-direction:column; align-items:center; gap:0.5rem;
-  color:var(--text-muted);
-}
-.blooper-placeholder .emoji { font-size:3rem; opacity:0.5; }
-.blooper-placeholder .hint {
-  font-family:'Share Tech Mono',monospace;
-  font-size:0.65rem; letter-spacing:1.5px; opacity:0.4;
-  text-align:center; padding:0 1rem;
-}
-
-/* Body */
-.blooper-body { padding:1.1rem 1.25rem; }
-.blooper-title {
-  font-weight:700; font-size:0.95rem;
-  color:var(--text); margin-bottom:5px; line-height:1.3;
-}
-.blooper-desc {
-  font-size:0.88rem;
-  color:color-mix(in srgb,var(--text) 60%,transparent);
-  line-height:1.55; margin-bottom:0.65rem;
-}
-.blooper-footer {
-  display:flex; align-items:center; justify-content:space-between;
-  flex-wrap:wrap; gap:6px;
-}
-.blooper-tag {
-  display:inline-block;
-  font-family:'Share Tech Mono',monospace; font-size:0.62rem;
-  padding:3px 9px; border-radius:5px;
-  background:color-mix(in srgb,var(--accent) 10%,transparent);
-  color:var(--accent2);
-  border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);
-}
-.blooper-date {
-  font-family:'Share Tech Mono',monospace;
-  font-size:0.62rem; color:var(--text-muted);
-}
-
-/* No results */
-.no-bloopers {
-  text-align:center; padding:4rem 2rem;
-  grid-column:1/-1;
-  font-family:'Share Tech Mono',monospace;
-  font-size:0.85rem; color:var(--text-muted);
-}
-
 /* ===== LIGHTBOX ===== */
 .lightbox-overlay {
-  display:none;
-  position:fixed; inset:0; z-index:9999;
-  background:rgba(0,0,0,0.92);
+  display:none; position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,0.94);
   align-items:center; justify-content:center;
-  flex-direction:column;
-  padding:1rem;
+  flex-direction:column; padding:1rem;
 }
 .lightbox-overlay.active { display:flex; }
-
 .lightbox-img-wrap {
-  position:relative;
   display:flex; align-items:center; justify-content:center;
-  width:100%; max-width:900px;
-  max-height:80vh;
+  width:100%; max-width:900px; max-height:80vh;
 }
 .lightbox-overlay img {
   max-width:100%; max-height:80vh;
-  object-fit:contain;
-  border-radius:10px;
-  display:block;
+  object-fit:contain; border-radius:10px; display:block;
 }
 .lightbox-caption {
   margin-top:0.75rem;
   color:rgba(255,255,255,0.75);
   font-family:'Share Tech Mono',monospace;
-  font-size:0.85rem;
-  text-align:center;
-  min-height:1.2em;
+  font-size:0.85rem; text-align:center; min-height:1.2em;
+}
+.lb-album-label {
+  margin-top:0.3rem; color:rgba(255,255,255,0.35);
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.7rem; text-align:center; letter-spacing:1px;
 }
 .lb-close {
   position:fixed; top:1rem; right:1.25rem;
   background:rgba(255,255,255,0.15);
-  border:none; color:#fff;
-  border-radius:50%;
-  width:40px; height:40px;
-  font-size:1.4rem; line-height:40px;
-  text-align:center; cursor:pointer;
-  transition:background 0.2s;
-  z-index:10000;
+  border:none; color:#fff; border-radius:50%;
+  width:40px; height:40px; font-size:1.4rem; line-height:40px;
+  text-align:center; cursor:pointer; transition:background 0.2s; z-index:10000;
 }
 .lb-close:hover { background:rgba(255,255,255,0.3); }
-
 .lb-arrow {
   position:fixed; top:50%; transform:translateY(-50%);
   background:rgba(255,255,255,0.15);
-  border:none; color:#fff;
-  border-radius:50%;
-  width:44px; height:44px;
-  font-size:1.5rem; cursor:pointer;
-  transition:background 0.2s;
-  z-index:10000;
+  border:none; color:#fff; border-radius:50%;
+  width:44px; height:44px; font-size:1.5rem; cursor:pointer;
+  transition:background 0.2s; z-index:10000;
   display:flex; align-items:center; justify-content:center;
 }
 .lb-arrow:hover { background:rgba(255,255,255,0.3); }
 .lb-prev { left:1rem; }
 .lb-next { right:1rem; }
-
 .lb-counter {
   position:fixed; bottom:1.25rem; left:50%; transform:translateX(-50%);
   color:rgba(255,255,255,0.45);
   font-family:'Share Tech Mono',monospace;
-  font-size:0.75rem; z-index:10000;
-  letter-spacing:1px;
+  font-size:0.75rem; z-index:10000; letter-spacing:1px;
 }
 </style>
 </head>
@@ -174,9 +188,7 @@
 
 <nav>
   <div class="nav-logo">
-    <div class="nav-logo-img">
-      <img src="logo.jpg" alt="Logo" />
-    </div>
+    <div class="nav-logo-img"><img src="logo.jpg" alt="Logo"/></div>
     <div class="nav-brand">MAUCHLY <span>BSIT · 2025-2026</span></div>
   </div>
   <div class="nav-right">
@@ -195,7 +207,7 @@
 
 <div class="page-header">
   <h1>Mauchly</h1>
-  <p> the unscripted, unfiltered side of mauchly.</p>
+  <p>the unscripted, unfiltered side of mauchly.</p>
 </div>
 
 <div class="section-container">
@@ -208,7 +220,26 @@
     </p>
   </div>
 
-  <div class="bloopers-grid" id="bloopers-grid"></div>
+  <!-- ALBUMS VIEW -->
+  <div class="albums-view" id="albums-view">
+    <div class="albums-section-label">My Albums</div>
+    <div class="albums-grid" id="albums-grid"></div>
+  </div>
+
+  <!-- PHOTOS VIEW -->
+  <div class="photos-view" id="photos-view">
+    <button class="back-btn" id="back-btn" onclick="showAlbumsView()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      Albums
+    </button>
+    <div class="photos-album-header">
+      <div class="photos-album-title" id="photos-album-title"></div>
+      <div class="photos-album-count" id="photos-album-count"></div>
+    </div>
+    <div class="bloopers-grid" id="bloopers-grid"></div>
+  </div>
 
 </div>
 
@@ -216,6 +247,7 @@
   © Section Mauchly · BSIT · Named after John W. Mauchly, co-inventor of ENIAC
 </footer>
 
+<!-- Lightbox -->
 <div class="lightbox-overlay" id="lightbox">
   <button class="lb-close" id="lb-close">✕</button>
   <button class="lb-arrow lb-prev" id="lb-prev">&#8249;</button>
@@ -223,63 +255,154 @@
     <img src="" alt="" id="lb-img"/>
   </div>
   <div class="lightbox-caption" id="lb-caption"></div>
+  <div class="lb-album-label" id="lb-album-label"></div>
   <button class="lb-arrow lb-next" id="lb-next">&#8250;</button>
   <div class="lb-counter" id="lb-counter"></div>
 </div>
 
 <script src="theme.js"></script>
 <script>
-const BLOOPERS = [
-  { photo: "3.jpg",   caption: "wahhhhh" },
-  { photo: "2.jpg" },
-  { photo: "4.jpg" },
-  { photo: "5.jpg" },
-  { photo: "6.jpg" },
-  { photo: "7.jpg",   caption: "cutee" },
-  { photo: "8.jpg",   caption: "hala ka 😭" },
-  { photo: "9.jpg",   caption: "prettyyy" },
-  { photo: "10.jpg",  caption: "uyy bagay" },
-  { photo: "11.jpg",  caption: "grabe naman" },
-  { photo: "12.jpg",  caption: "slayy" },
-  { photo: "13.jpg",  caption: "angas 🔥" },
-  { photo: "14.jpg",  caption: "wahhh idol" },
-  { photo: "15.jpg",  caption: "nakaka smile" },
-  { photo: "16.jpg",  caption: "cutie overload" },
-  { photo: "117.jpg", caption: "sheesh 😳" },
-  { photo: "18.jpg",  caption: "bangga boys" },
-  { photo: "19.jpg",  caption: "wow naman" },
-  { photo: "20.jpg",  caption: "main character" },
-  { photo: "21.jpeg", caption: "soft vibes" },
-  { photo: "22.jpeg", caption: "😭❤️" },
-  { photo: "23.jpg",  caption: "ikaw nanaman" },
-  { photo: "24.jpg",  caption: "eyyy" },
-  { photo: "25.jpg",  caption: "galing mo" },
-  { photo: "26.jpeg", caption: "nakakatuwa" },
-  { photo: "270.jpg",  caption: "solid nito" },
-  { photo: "28.jpg",  caption: "cute smileee" },
-  { photo: "29.jpeg", caption: "pogii" },
-  { photo: "30.jpeg", caption: "✨✨✨" },
-  { photo: "31.jpeg", caption: "grabeee" },
-  { photo: "32.jpeg", caption: "akala ko artista" },
-  { photo: "33.jpeg", caption: "HAHAHAHA" },
-  { photo: "34.jpeg", caption: "lowkey fav" },
-  { photo: "35.jpeg", caption: "saur pretty" },
-  { photo: "36.jpeg", caption: "cute moments" },
-  { photo: "37.jpeg", caption: "another oneee" },
-  { photo: "38.jpeg", caption: "perfect shot" },
-  { photo: "39.jpeg", caption: "uy bagay filter" },
-  { photo: "40.jpeg", caption: "last na promise 😭" }
+// =============================================
+//  ALBUMS — rename "name" values freely!
+//  "cover" = filename of the cover photo.
+//  If no cover set, first photo is used auto.
+// =============================================
+const ALBUMS = [
+  {
+    name: "Album 1",
+    cover: "3.jpg",
+    photos: [
+      { photo: "3.jpg",  caption: "wahhhhh" },
+      { photo: "2.jpg" },
+      { photo: "4.jpg" },
+      { photo: "5.jpg" },
+      { photo: "6.jpg" },
+      { photo: "7.jpg",  caption: "cutee" },
+      { photo: "8.jpg",  caption: "hala ka 😭" },
+      { photo: "9.jpg",  caption: "prettyyy" },
+      { photo: "10.jpg", caption: "uyy bagay" },
+    ]
+  },
+  {
+    name: "Album 2",
+    cover: "11.jpg",
+    photos: [
+      { photo: "11.jpg",  caption: "grabe naman" },
+      { photo: "12.jpg",  caption: "slayy" },
+      { photo: "13.jpg",  caption: "angas 🔥" },
+      { photo: "14.jpg",  caption: "wahhh idol" },
+      { photo: "15.jpg",  caption: "nakaka smile" },
+      { photo: "16.jpg",  caption: "cutie overload" },
+      { photo: "117.jpg", caption: "sheesh 😳" },
+      { photo: "18.jpg",  caption: "bangga boys" },
+      { photo: "19.jpg",  caption: "wow naman" },
+      { photo: "20.jpg",  caption: "main character" },
+    ]
+  },
+  {
+    name: "Album 3",
+    cover: "21.jpeg",
+    photos: [
+      { photo: "21.jpeg", caption: "soft vibes" },
+      { photo: "22.jpeg", caption: "😭❤️" },
+      { photo: "23.jpg",  caption: "ikaw nanaman" },
+      { photo: "24.jpg",  caption: "eyyy" },
+      { photo: "25.jpg",  caption: "galing mo" },
+      { photo: "26.jpeg", caption: "nakakatuwa" },
+      { photo: "270.jpg", caption: "solid nito" },
+      { photo: "28.jpg",  caption: "cute smileee" },
+      { photo: "29.jpeg", caption: "pogii" },
+      { photo: "30.jpeg", caption: "✨✨✨" },
+    ]
+  },
+  {
+    name: "Album 4",
+    cover: "31.jpeg",
+    photos: [
+      { photo: "31.jpeg", caption: "grabeee" },
+      { photo: "32.jpeg", caption: "akala ko artista" },
+      { photo: "33.jpeg", caption: "HAHAHAHA" },
+      { photo: "34.jpeg", caption: "lowkey fav" },
+      { photo: "35.jpeg", caption: "saur pretty" },
+      { photo: "36.jpeg", caption: "cute moments" },
+      { photo: "37.jpeg", caption: "another oneee" },
+      { photo: "38.jpeg", caption: "perfect shot" },
+      { photo: "39.jpeg", caption: "uy bagay filter" },
+      { photo: "40.jpeg", caption: "last na promise 😭" },
+    ]
+  }
 ];
 
-const photos = BLOOPERS.filter(b => b.photo && b.photo.trim() !== '');
+let activeAlbum = 0;
 let currentIndex = 0;
 
+function currentPhotos() {
+  return ALBUMS[activeAlbum].photos.filter(p => p.photo && p.photo.trim());
+}
+
+// ===== ALBUMS VIEW =====
+function renderAlbumsGrid() {
+  const grid = document.getElementById('albums-grid');
+  grid.innerHTML = ALBUMS.map((a, i) => {
+    const cover = a.cover || (a.photos[0] && a.photos[0].photo) || '';
+    const count = a.photos.filter(p => p.photo && p.photo.trim()).length;
+    return `
+      <button class="album-cover-card" onclick="openAlbum(${i})">
+        <div class="album-cover-thumb">
+          ${cover
+            ? `<img src="${cover}" alt="${a.name}" loading="lazy"/>`
+            : `<div class="album-cover-placeholder">📁</div>`}
+        </div>
+        <div class="album-cover-name">${a.name}</div>
+        <div class="album-cover-count">${count}</div>
+      </button>`;
+  }).join('');
+}
+
+function openAlbum(index) {
+  activeAlbum = index;
+  document.getElementById('albums-view').classList.add('hidden');
+  const pv = document.getElementById('photos-view');
+  pv.classList.add('active');
+  renderPhotosGrid();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showAlbumsView() {
+  document.getElementById('albums-view').classList.remove('hidden');
+  document.getElementById('photos-view').classList.remove('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== PHOTOS GRID =====
+function renderPhotosGrid() {
+  const photos = currentPhotos();
+  const album  = ALBUMS[activeAlbum];
+  document.getElementById('photos-album-title').textContent = album.name;
+  document.getElementById('photos-album-count').textContent = photos.length + ' photos';
+
+  const grid = document.getElementById('bloopers-grid');
+  if (!photos.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem;font-family:\'Share Tech Mono\',monospace;color:var(--text-muted)">No photos yet.</div>';
+    return;
+  }
+  grid.innerHTML = photos.map((p, i) => `
+    <div class="blooper-card" onclick="openLightbox(${i})">
+      <img src="${p.photo}" alt="${p.caption || ''}" loading="lazy"/>
+      ${p.caption ? `<div class="caption-hover">${p.caption}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+// ===== LIGHTBOX =====
 function openLightbox(index) {
+  const photos = currentPhotos();
   currentIndex = index;
-  const b = photos[index];
-  document.getElementById('lb-img').src = b.photo;
-  document.getElementById('lb-img').alt = b.caption || '';
-  document.getElementById('lb-caption').textContent = b.caption || '';
+  const p = photos[index];
+  document.getElementById('lb-img').src = p.photo;
+  document.getElementById('lb-img').alt = p.caption || '';
+  document.getElementById('lb-caption').textContent = p.caption || '';
+  document.getElementById('lb-album-label').textContent = ALBUMS[activeAlbum].name;
   document.getElementById('lb-counter').textContent = (index + 1) + ' / ' + photos.length;
   document.getElementById('lightbox').classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -291,11 +414,13 @@ function closeLightbox() {
 }
 
 function showPrev() {
+  const photos = currentPhotos();
   currentIndex = (currentIndex - 1 + photos.length) % photos.length;
   openLightbox(currentIndex);
 }
 
 function showNext() {
+  const photos = currentPhotos();
   currentIndex = (currentIndex + 1) % photos.length;
   openLightbox(currentIndex);
 }
@@ -303,45 +428,27 @@ function showNext() {
 document.getElementById('lb-close').addEventListener('click', closeLightbox);
 document.getElementById('lb-prev').addEventListener('click', showPrev);
 document.getElementById('lb-next').addEventListener('click', showNext);
-
 document.getElementById('lightbox').addEventListener('click', function(e) {
   if (e.target === this) closeLightbox();
 });
-
 document.addEventListener('keydown', function(e) {
   if (!document.getElementById('lightbox').classList.contains('active')) return;
-  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'Escape')    closeLightbox();
   if (e.key === 'ArrowLeft') showPrev();
   if (e.key === 'ArrowRight') showNext();
 });
 
-/* Swipe support for mobile */
 let touchStartX = 0;
 document.getElementById('lightbox').addEventListener('touchstart', function(e) {
   touchStartX = e.changedTouches[0].screenX;
 });
 document.getElementById('lightbox').addEventListener('touchend', function(e) {
   const diff = touchStartX - e.changedTouches[0].screenX;
-  if (Math.abs(diff) > 50) {
-    if (diff > 0) showNext(); else showPrev();
-  }
+  if (Math.abs(diff) > 50) { if (diff > 0) showNext(); else showPrev(); }
 });
 
-function renderBloopers() {
-  const grid = document.getElementById('bloopers-grid');
-  if (!photos.length) {
-    grid.innerHTML = '<div class="no-bloopers">No bloopers yet.</div>';
-    return;
-  }
-  grid.innerHTML = photos.map((b, i) => `
-    <div class="blooper-card image-only" onclick="openLightbox(${i})">
-      <div class="blooper-photo">
-        <img src="${b.photo}" alt="gallery Image" loading="lazy"/>
-      </div>
-    </div>`).join('');
-}
-
-renderBloopers();
+// ===== INIT =====
+renderAlbumsGrid();
 </script>
 </body>
 </html>
