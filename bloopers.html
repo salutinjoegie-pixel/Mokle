@@ -336,7 +336,7 @@ function renderBloopers() {
   grid.innerHTML = photos.map((b, i) => `
     <div class="blooper-card image-only" onclick="openLightbox(${i})">
       <div class="blooper-photo">
-        <img src="${b.photo}" alt="Blooper Image" loading="lazy"/>
+        <img src="${b.photo}" alt="gallery Image" loading="lazy"/>
       </div>
     </div>`).join('');
 }
