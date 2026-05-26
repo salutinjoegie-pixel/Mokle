@@ -328,6 +328,28 @@
   margin-bottom:1.5rem;
 }
 
+/* Admin toggle button */
+.admin-toggle-btn {
+  position:absolute; top:1.25rem; right:1.25rem;
+  background:none;
+  border:1px solid var(--border);
+  border-radius:8px;
+  color:var(--text-muted);
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.68rem; padding:5px 12px;
+  cursor:pointer; letter-spacing:1px;
+  transition:all 0.2s;
+  z-index:2;
+}
+.admin-toggle-btn:hover {
+  border-color:var(--accent);
+  color:var(--accent);
+}
+.admin-toggle-btn.active {
+  border-color:#4ade80;
+  color:#4ade80;
+}
+
 /* Form */
 .shoutout-form {
   display:flex; flex-direction:column; gap:0.75rem;
@@ -455,6 +477,22 @@
 }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
+/* Delete button */
+.delete-btn {
+  background:none;
+  border:1px solid #f87171;
+  border-radius:6px;
+  color:#f87171;
+  font-size:0.65rem;
+  padding:2px 8px;
+  cursor:pointer;
+  font-family:'Share Tech Mono',monospace;
+  letter-spacing:1px;
+  transition:all 0.2s;
+  flex-shrink:0;
+}
+.delete-btn:hover { background:rgba(248,113,113,0.15); }
+
 @media(max-width:600px){
   .adviser-card { flex-direction:column; text-align:center; }
   .officers-grid { grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); }
@@ -462,6 +500,7 @@
   #lightbox-img  { max-width:92vw; max-height:70vh; }
   .shoutout-form-row { flex-direction:column; }
   .shoutout-send-btn { width:100%; text-align:center; }
+  .admin-toggle-btn { font-size:0.6rem; padding:4px 8px; }
 }
 </style>
 </head>
@@ -481,7 +520,6 @@
       <a href="index.html">Home</a>
       <a href="about.html" class="active">About</a>
       <a href="bloopers.html">Gallery</a>
-      <a href="match.html">Match 💘</a>
     </div>
     <div class="theme-switcher">
       <button class="theme-btn t-dark"   data-theme="dark"   title="Dark"></button>
@@ -574,6 +612,9 @@
   <div class="section-label">Shoutout Wall 💌</div>
   <div class="shoutout-wrap fade-up">
     <h2>DROP A MESSAGE</h2>
+    <button class="admin-toggle-btn" id="admin-toggle-btn" onclick="toggleAdmin()">
+      🔐 Admin
+    </button>
     <p class="shoutout-sub">// anonymous · everyone can read · be kind 💜</p>
 
     <div class="shoutout-form">
@@ -616,31 +657,62 @@
 <!-- Firebase SDKs -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, push, onValue, serverTimestamp }
+  import { getDatabase, ref, push, remove, onValue, serverTimestamp }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-  // =============================================
-  //  🔥 PASTE YOUR FIREBASE CONFIG HERE
-  //  Steps:
-  //  1. Go to https://console.firebase.google.com
-  //  2. Create a project (free)
-  //  3. Click "Add app" → Web
-  //  4. Copy the firebaseConfig object below
-  //  5. In Firebase console → Realtime Database
-  //     → Create database → Start in test mode
-  // =============================================
   const firebaseConfig = {
-  apiKey:            "AIzaSyBIg-8jnFurIL2pOUvd5HlAbYMSorIHziE",
-  authDomain:        "jords-e1b43.firebaseapp.com",
-  databaseURL:       "https://jords-e1b43-default-rtdb.firebaseio.com",
-  projectId:         "jords-e1b43",
-  storageBucket:     "jords-e1b43.firebasestorage.app",
-  messagingSenderId: "1081333594994",
-  appId:             "1:1081333594994:web:0ba8e81801dfb20183fbeb"
-};
-  const app = initializeApp(firebaseConfig);
-  const db  = getDatabase(app);
+    apiKey:            "AIzaSyBIg-8jnFurIL2pOUvd5HlAbYMSorIHziE",
+    authDomain:        "jords-e1b43.firebaseapp.com",
+    databaseURL:       "https://jords-e1b43-default-rtdb.firebaseio.com",
+    projectId:         "jords-e1b43",
+    storageBucket:     "jords-e1b43.firebasestorage.app",
+    messagingSenderId: "1081333594994",
+    appId:             "1:1081333594994:web:0ba8e81801dfb20183fbeb"
+  };
+
+  const app     = initializeApp(firebaseConfig);
+  const db      = getDatabase(app);
   const msgsRef = ref(db, 'shoutouts');
+
+  // =============================================
+  //  🔑 CHANGE THIS PASSWORD TO YOUR OWN!
+  // =============================================
+  const ADMIN_PASSWORD = '2cmokley';
+  let isAdmin = false;
+  let lastSnapshot = null;
+
+  /* ---- Admin toggle ---- */
+  window.toggleAdmin = function() {
+    if (isAdmin) {
+      // Already admin — toggle off
+      isAdmin = false;
+      const btn = document.getElementById('admin-toggle-btn');
+      btn.textContent = '🔐 Admin';
+      btn.classList.remove('active');
+      renderShoutouts(lastSnapshot);
+      return;
+    }
+    const pwd = prompt('Enter admin password:');
+    if (pwd === null) return; // cancelled
+    if (pwd === ADMIN_PASSWORD) {
+      isAdmin = true;
+      const btn = document.getElementById('admin-toggle-btn');
+      btn.textContent = '🔓 Admin ON';
+      btn.classList.add('active');
+      renderShoutouts(lastSnapshot);
+    } else {
+      alert('Wrong password! Access denied.');
+    }
+  };
+
+  /* ---- Delete a message ---- */
+  window.deleteShoutout = function(key) {
+    if (!isAdmin) return;
+    if (!confirm('Delete this message permanently?')) return;
+    remove(ref(db, 'shoutouts/' + key)).catch(() => {
+      alert('Failed to delete. Check your connection.');
+    });
+  };
 
   /* ---- Send message ---- */
   window.sendShoutout = function() {
@@ -658,61 +730,39 @@
       return;
     }
 
-    btn.disabled     = true;
-    btn.textContent  = 'sending...';
+    btn.disabled    = true;
+    btn.textContent = 'sending...';
     status.textContent = '';
 
-    push(msgsRef, {
-      from,
-      text,
-      ts: serverTimestamp()
-    }).then(() => {
-      msgEl.value        = '';
-      nameEl.value       = '';
-      status.textContent = '✓ message sent! 💜';
-      status.className   = 'shoutout-status ok';
-      btn.disabled       = false;
-      btn.textContent    = 'SEND 💬';
-      setTimeout(() => { status.textContent = ''; }, 3000);
-    }).catch(() => {
-      status.textContent = '✕ failed to send. check your connection.';
-      status.className   = 'shoutout-status err';
-      btn.disabled       = false;
-      btn.textContent    = 'SEND 💬';
-    });
+    push(msgsRef, { from, text, ts: serverTimestamp() })
+      .then(() => {
+        msgEl.value        = '';
+        nameEl.value       = '';
+        status.textContent = '✓ message sent! 💜';
+        status.className   = 'shoutout-status ok';
+        btn.disabled       = false;
+        btn.textContent    = 'SEND 💬';
+        setTimeout(() => { status.textContent = ''; }, 3000);
+      })
+      .catch(() => {
+        status.textContent = '✕ failed to send. check your connection.';
+        status.className   = 'shoutout-status err';
+        btn.disabled       = false;
+        btn.textContent    = 'SEND 💬';
+      });
   };
 
-  /* ---- Load messages in real time ---- */
+  /* ---- Time helper ---- */
   function timeAgo(ts) {
     if (!ts) return 'just now';
     const diff = Math.floor((Date.now() - ts) / 1000);
-    if (diff < 60)   return 'just now';
-    if (diff < 3600) return Math.floor(diff/60) + 'm ago';
-    if (diff < 86400)return Math.floor(diff/3600) + 'h ago';
-    return Math.floor(diff/86400) + 'd ago';
+    if (diff < 60)    return 'just now';
+    if (diff < 3600)  return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+    return Math.floor(diff / 86400) + 'd ago';
   }
 
-  onValue(msgsRef, (snapshot) => {
-    const list = document.getElementById('shoutout-list');
-    const data = snapshot.val();
-
-    if (!data) {
-      list.innerHTML = '<div class="shoutout-empty">no messages yet — be the first! 💜</div>';
-      return;
-    }
-
-    const items = Object.values(data).reverse();
-    list.innerHTML = items.map(item => `
-      <div class="shoutout-item">
-        <div class="shoutout-item-header">
-          <span class="shoutout-from">${escapeHtml(item.from || 'anonymous')}</span>
-          <span class="shoutout-time">${timeAgo(item.ts)}</span>
-        </div>
-        <div class="shoutout-text">${escapeHtml(item.text)}</div>
-      </div>
-    `).join('');
-  });
-
+  /* ---- Escape HTML ---- */
   function escapeHtml(str) {
     return String(str)
       .replace(/&/g,'&amp;')
@@ -720,71 +770,104 @@
       .replace(/>/g,'&gt;')
       .replace(/"/g,'&quot;');
   }
+
+  /* ---- Render messages ---- */
+  function renderShoutouts(snapshot) {
+    lastSnapshot = snapshot;
+    const list = document.getElementById('shoutout-list');
+    if (!snapshot) return;
+    const data = snapshot.val();
+
+    if (!data) {
+      list.innerHTML = '<div class="shoutout-empty">no messages yet — be the first! 💜</div>';
+      return;
+    }
+
+    const items = Object.entries(data).reverse();
+    list.innerHTML = items.map(([key, item]) => `
+      <div class="shoutout-item">
+        <div class="shoutout-item-header">
+          <span class="shoutout-from">${escapeHtml(item.from || 'anonymous')}</span>
+          <div style="display:flex;align-items:center;gap:0.5rem;">
+            <span class="shoutout-time">${timeAgo(item.ts)}</span>
+            ${isAdmin
+              ? `<button class="delete-btn" onclick="deleteShoutout('${key}')">✕ DELETE</button>`
+              : ''}
+          </div>
+        </div>
+        <div class="shoutout-text">${escapeHtml(item.text)}</div>
+      </div>
+    `).join('');
+  }
+
+  /* ---- Real-time listener ---- */
+  onValue(msgsRef, renderShoutouts);
 </script>
 
 <script src="theme.js"></script>
 <script>
 const OFFICERS = [
-  { name:"Princess Grace Patricio", role:"President", photo:"nces.jpeg" },
-  { name:"Neri Rose Palma", role:"Vice President", photo:"" },
-  { name:"Lay Mae Sumido", role:"Secretary", photo:"lay.jpeg" },
-  { name:"Margarit Panes", role:"Assistant Secretary", photo:"marga.jpeg" },
-  { name:"Cheryl Jean Palma", role:"Treasurer", photo:"" },
-  { name:"John Paul Paneza", role:"Assistant Treasurer", photo:"pol.jpeg" },
-  { name:"Sedrika Quidava", role:"Auditor", photo:"sed.jpeg" },
-  { name:"Kenvie Samentar", role:"Assistant Auditor", photo:"ken.jpeg" },
-  { name:"Joegie Salutin", role:"P.I.O", photo:"joji.jpeg" },
-  { name:"Desiree Jane Palma", role:"Assistant P.I.O", photo:"dis.jpeg" },
-  { name:"Gabriel Kent Parriño", role:"P.C.O 1", photo:"gab.jpeg" },
-  { name:"Camille Palomaria", role:"P.C.O 2", photo:"camel.jpeg" },
-  { name:"Ramon Miguel Palmares", role:"P.C.O 1", photo:"ramon.jpeg" },
-  { name:"Maricar Panes", role:"P.C.O 2", photo:"" },
-  { name:"Sam Auda", role:"Sports Coordinator 1", photo:"sam.jpeg" },
-  { name:"John Alfred Santos", role:"Sports Coordinator 2", photo:"" },
-  { name:"Jay Pamonag", role:"Cultural Coordinator 1", photo:"" },
-  { name:"Jenny Quitane", role:"Cultural Coordinator 2", photo:"" },
-  { name:"Reinheart Pecasis", role:"Muse", photo: "hart.jpeg" },
-  { name:"Charles Brian Taburna", role:"Escort", photo:"cha.jpeg" },
+  { name:"Princess Grace Patricio", role:"President",              photo:"" },
+  { name:"Neri Rose Palma",         role:"Vice President",         photo:"" },
+  { name:"Lady Mae Sumido",         role:"Secretary",              photo:"" },
+  { name:"Margarit Panes",          role:"Assistant Secretary",    photo:"" },
+  { name:"Cheryl Jean Palma",       role:"Treasurer",              photo:"" },
+  { name:"John Paul Paneza",        role:"Assistant Treasurer",    photo:"" },
+  { name:"Sedrika Quidava",         role:"Auditor",                photo:"" },
+  { name:"Kenvie Samentar",         role:"Assistant Auditor",      photo:"kevi.jpg" },
+  { name:"Joegie Salutin",          role:"P.I.O",                  photo:"joji.jpeg" },
+  { name:"Desiree Jane Palma",      role:"Assistant P.I.O",        photo:"" },
+  { name:"Gabriel Kent Parriño",    role:"P.C.O 1",                photo:"" },
+  { name:"Camille Palomaria",       role:"P.C.O 2",                photo:"camil.jpeg" },
+  { name:"Ramon Miguel Palmares",   role:"P.C.O 1",                photo:"ramon.jpeg" },
+  { name:"Maricar Panes",           role:"P.C.O 2",                photo:"" },
+  { name:"Sam Auda",                role:"Sports Coordinator 1",   photo:"sam.jpeg" },
+  { name:"John Alfred Santos",      role:"Sports Coordinator 2",   photo:"" },
+  { name:"Jay Pamonag",             role:"Cultural Coordinator 1", photo:"" },
+  { name:"Jenny Quitane",           role:"Cultural Coordinator 2", photo:"" },
+  { name:"Reinheart Pecasis",       role:"Muse",                   photo:"" },
+  { name:"Charles Brian Taburna",   role:"Escort",                 photo:"" },
 ];
 
 const MEMBERS = [
-  { name:"Rotchel May Palermo", photo:"" },
-  { name:"Desiree Jane Palma", photo:"dis.jpeg" },
-  { name:"Neri Rose Palma", photo:"" },
-  { name:"Ramon Miguel Palmares", photo:"ramon.jpeg" },
-  { name:"Kenneth Palmes", photo:"kennet.jpeg" },
-  { name:"Camille Rose Palomaria", photo:"camel.jpeg" },
-  { name:"John Rey Palomo", photo:"janrey.jpeg" },
-  { name:"Reniel Palomo", photo:"reniel.jpeg" },
-  { name:"Cherryl Jean Pama", photo:"" },
-  { name:"Jay Pamonag", photo:"" },
-  { name:"Lyka Panes", photo:"lyka.jpeg" },
-  { name:"Margarit Panes", photo:"marga.jpeg" },
-  { name:"Maricar Panes", photo:"maricar.jpeg" },
-  { name:"Jhon Paul Paneza", photo:"pol.jpeg" },
-  { name:"AJ Novee Paniza", photo:"aj.jpeg" },
-  { name:"Gabriel Kent Parreño", photo:"gab.jpeg" },
-  { name:"Princess Grace Patricio", photo:"nces.jpeg" },
-  { name:"Reinhearth Pecasis", photo:"hart.jpeg" },
-  { name:"Lynbell Grace Penora", photo:"lyn.jpeg" },
-  { name:"Jhon David Poblador", photo:"david.jpeg" },
-  { name:"Charmie May Quibingco", photo:"" },
-  { name:"Sedrika Quidan", photo:"sed.jpeg" },
-  { name:"Jenny Quitane", photo:"" },
-  { name:"Sam Ruda", photo:"sam.jpeg" },
-  { name:"Joegie Salutin", photo:"joji.jpeg" },
-  { name:"Kenvie Samentar", photo:"ken.jpeg" },
-  { name:"Devine Grace Sampiano", photo:"divine.jpeg" },
-  { name:"Lyca Santero", photo:"" },
-  { name:"John Alfred Santos", photo:"" },
-  { name:"Lay Mae Sumido", photo:"lay.jpeg" },
-  { name:"Charles Brian Taberna", photo:"cha.jpeg" },
-  { name:"Dianna Tuarez", photo:"diana.jpeg" },
-  { name:"Robert Tumale", photo:"robert.jpeg" },
-  { name:"Ed Erlje Vargas", photo:"erji.jpeg" },
-  { name:"Justine Mae Villalobos", photo:"justine.jpeg" },
+  { name:"Rotchel May Palermo",    photo:"" },
+  { name:"Desiree Jane Palma",     photo:"" },
+  { name:"Neri Rose Palma",        photo:"" },
+  { name:"Ramon Miguel Palmares",  photo:"ramon.jpeg" },
+  { name:"Kenneth Palmes",         photo:"" },
+  { name:"Camille Rose Palomaria", photo:"" },
+  { name:"John Rey Palomo",        photo:"" },
+  { name:"Reniel Palomo",          photo:"" },
+  { name:"Cherryl Jean Pama",      photo:"" },
+  { name:"Jay Pamonag",            photo:"" },
+  { name:"Lyka Panes",             photo:"" },
+  { name:"Margarit Panes",         photo:"" },
+  { name:"Maricar Panes",          photo:"maricar.jpeg" },
+  { name:"Jhon Paul Paneza",       photo:"" },
+  { name:"AJ Novee Paniza",        photo:"" },
+  { name:"Gabriel Kent Parreño",   photo:"" },
+  { name:"Princess Grace Patricio",photo:"" },
+  { name:"Reinhearth Pecasis",     photo:"" },
+  { name:"Lynbell Grace Penora",   photo:"lyn.jpeg" },
+  { name:"Jhon David Poblador",    photo:"david.jpeg" },
+  { name:"Charmie May Quibingco",  photo:"" },
+  { name:"Sedrika Quidan",         photo:"" },
+  { name:"Jenny Quitane",          photo:"" },
+  { name:"Sam Ruda",               photo:"" },
+  { name:"Joegie Salutin",         photo:"joji.jpeg" },
+  { name:"Kenvie Samentar",        photo:"" },
+  { name:"Devine Grace Sampiano",  photo:"" },
+  { name:"Lyca Santero",           photo:"" },
+  { name:"John Alfred Santos",     photo:"" },
+  { name:"Lady Mae Sumido",        photo:"" },
+  { name:"Charles Brian Taberna",  photo:"" },
+  { name:"Dianna Tuarez",          photo:"" },
+  { name:"Robert Tumale",          photo:"" },
+  { name:"Ed Erlje Vargas",        photo:"" },
+  { name:"Justine Mae Villalobos", photo:"" },
 ];
 
+/* ===== LIGHTBOX ===== */
 const lightbox     = document.getElementById('lightbox');
 const lightboxImg  = document.getElementById('lightbox-img');
 const lightboxName = document.getElementById('lightbox-name');
@@ -804,30 +887,32 @@ function closeLightbox() {
   setTimeout(() => { lightboxImg.src = ''; }, 300);
 }
 document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
-lightbox.addEventListener('click', function(e) { if(e.target===lightbox) closeLightbox(); });
-document.addEventListener('keydown', function(e) { if(e.key==='Escape') closeLightbox(); });
+lightbox.addEventListener('click', function(e) { if (e.target === lightbox) closeLightbox(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLightbox(); });
 
+/* ===== HELPERS ===== */
 function initials(name) {
   return name.replace(/\[|\]/g,'').split(' ')
-    .filter(w=>w.length>0).map(w=>w[0].toUpperCase()).join('').slice(0,2)||'?';
+    .filter(w => w.length > 0).map(w => w[0].toUpperCase()).join('').slice(0,2) || '?';
 }
 
+/* ===== RENDER OFFICERS ===== */
 function renderOfficers() {
   const grid = document.getElementById('officers-grid');
-  grid.innerHTML = OFFICERS.map((s,i) => {
+  grid.innerHTML = OFFICERS.map((s, i) => {
     const isPresident = s.role === 'President';
     return `
-      <div class="officer-card${isPresident?' is-president':''} fade-up"
-           style="animation-delay:${i*0.05}s">
-        ${isPresident?'<span class="crown-icon">👑</span>':''}
-        <div class="officer-photo${s.photo?' has-photo':''}"
-             ${s.photo?`onclick="openLightbox('${s.photo}','${s.name.replace(/'/g,"\\'")}','${s.role.replace(/'/g,"\\'")}')"`:''}> 
+      <div class="officer-card${isPresident ? ' is-president' : ''} fade-up"
+           style="animation-delay:${i * 0.05}s">
+        ${isPresident ? '<span class="crown-icon">👑</span>' : ''}
+        <div class="officer-photo${s.photo ? ' has-photo' : ''}"
+             ${s.photo ? `onclick="openLightbox('${s.photo}','${s.name.replace(/'/g,"\\'")}','${s.role.replace(/'/g,"\\'")}')"` : ''}>
           ${s.photo
-            ?`<img src="${s.photo}" alt="${s.name}"
-                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-              <span class="initials" style="display:none">${initials(s.name)}</span>
-              <span class="photo-zoom-hint">🔍 view</span>`
-            :`<span class="initials">${initials(s.name)}</span>`}
+            ? `<img src="${s.photo}" alt="${s.name}"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+               <span class="initials" style="display:none">${initials(s.name)}</span>
+               <span class="photo-zoom-hint">🔍 view</span>`
+            : `<span class="initials">${initials(s.name)}</span>`}
         </div>
         <div class="officer-name">${s.name}</div>
         <div class="officer-role-badge">${s.role}</div>
@@ -835,26 +920,30 @@ function renderOfficers() {
   }).join('');
 }
 
+/* ===== RENDER MEMBERS ===== */
 function renderMembers() {
-  const q = document.getElementById('search').value.toLowerCase().trim();
-  const grid = document.getElementById('members-grid');
+  const q       = document.getElementById('search').value.toLowerCase().trim();
+  const grid    = document.getElementById('members-grid');
   const countEl = document.getElementById('member-count');
   const filtered = MEMBERS.filter(s => s.name.toLowerCase().includes(q));
+
   countEl.textContent = `${filtered.length} / ${MEMBERS.length} students`;
+
   if (!filtered.length) {
     grid.innerHTML = '<div class="no-results">No students found.</div>';
     return;
   }
-  grid.innerHTML = filtered.map((s,i) => `
-    <div class="student-card fade-up" style="animation-delay:${i*0.03}s">
-      <div class="student-photo${s.photo?' has-photo':''}"
-           ${s.photo?`onclick="openLightbox('${s.photo}','${s.name.replace(/'/g,"\\'")}','')"`:''}> 
+
+  grid.innerHTML = filtered.map((s, i) => `
+    <div class="student-card fade-up" style="animation-delay:${i * 0.03}s">
+      <div class="student-photo${s.photo ? ' has-photo' : ''}"
+           ${s.photo ? `onclick="openLightbox('${s.photo}','${s.name.replace(/'/g,"\\'")}','')"` : ''}>
         ${s.photo
-          ?`<img src="${s.photo}" alt="${s.name}"
-                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-            <span class="initials" style="display:none">${initials(s.name)}</span>
-            <span class="photo-zoom-hint">🔍 view</span>`
-          :`<span class="initials">${initials(s.name)}</span>`}
+          ? `<img src="${s.photo}" alt="${s.name}"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+             <span class="initials" style="display:none">${initials(s.name)}</span>
+             <span class="photo-zoom-hint">🔍 view</span>`
+          : `<span class="initials">${initials(s.name)}</span>`}
       </div>
       <div class="student-name">${s.name}</div>
     </div>`
