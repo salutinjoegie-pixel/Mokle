@@ -496,7 +496,7 @@ const STUDENTS = [
   { name: "Jenny Quitane",           gender: "F" },
   { name: "Devine Grace Sampiano",   gender: "F" },
   { name: "Lyca Santero",            gender: "F" },
-  { name: "Lay Mae Sumido",         gender: "F" },
+  { name: "Lady Mae Sumido",         gender: "F" },
   { name: "Dianna Tuarez",           gender: "F" },
   { name: "Justine Mae Villalobos",  gender: "F" },
   // ---- BOYS ----
@@ -509,11 +509,11 @@ const STUDENTS = [
   { name: "AJ Novee Paniza",         gender: "M" },
   { name: "Gabriel Kent Parreño",    gender: "M" },
   { name: "Reinhearth Pecasis",      gender: "F" },
-  { name: "JhonDavid Poblador",     gender: "M" },
+  { name: "JhonDavid Poblador",      gender: "M" },
   { name: "Sam Ruda",                gender: "M" },
   { name: "Joegie Salutin",          gender: "M" },
   { name: "Kenvie Samentar",         gender: "F" },
-  { name: "jhonalfred Santos",      gender: "M" },
+  { name: "jhonalfred Santos",       gender: "M" },
   { name: "Charles Brian Taberna",   gender: "M" },
   { name: "Robert Tumale",           gender: "M" },
   { name: "Ed Erlje Vargas",         gender: "M" },
@@ -523,16 +523,19 @@ const SPECIAL_PAIRS = [
   {
     a: "charles brian taberna",
     b: "Sedrika Quidan",
-    compat: 101,
-    message: "Destined. The universe didn't even hesitate on this one 💘✨"
+    compat: 98,
+    message: "Destined. The universe didn't even hesitate on this one, it meant to be💘✨"
   },
   {
     a: "jhon paul paneza",
-    b: "kenvie samentar",
+    b: "Kenvie Samentar",
     compat: 99,
     message: "Some matches are just written in the stars fr 🌟💕"
   },
 ];
+
+// Tracks whether each special pair has already fired once this session
+const specialPairUsed = {};
 
 const MESSAGES = [
   "You two are basically the same person 😭💕",
@@ -552,7 +555,6 @@ const MESSAGES = [
   "Friendship goals unlocked 🏆💘",
 ];
 
-// Tracks the last partner shown so we never repeat back-to-back
 let lastPartnerName = "";
 
 /* ===== FLOATING HEARTS ===== */
@@ -636,28 +638,33 @@ function findMatch() {
   const lowerPlayer  = playerName.toLowerCase().trim();
   const playerGender = matched ? matched.gender : null;
 
-  // --- Check special pairs (one-directional: only player A gets the locked match) ---
+  // --- Check special pairs: only fire on the FIRST attempt ---
   for (const sp of SPECIAL_PAIRS) {
     if (lowerPlayer === sp.a) {
-      const partnerObj = STUDENTS.find(s => s.name.toLowerCase() === sp.b);
-      if (partnerObj) {
-        lastPartnerName = partnerObj.name.toLowerCase();
-        renderResult(playerName, partnerObj.name, sp.compat, sp.message);
-        return;
+      if (!specialPairUsed[sp.a]) {
+        // First attempt: give the locked match and mark it used
+        specialPairUsed[sp.a] = true;
+        const partnerObj = STUDENTS.find(s => s.name.toLowerCase() === sp.b.toLowerCase());
+        if (partnerObj) {
+          lastPartnerName = partnerObj.name.toLowerCase();
+          renderResult(playerName, partnerObj.name, sp.compat, sp.message);
+          return;
+        }
       }
+      // Second+ attempt: fall through to random matching below
+      break;
     }
   }
 
   // --- Build opposite-gender pool, always excluding last shown partner ---
   let pool = STUDENTS.filter(s => {
     const lowerS = s.name.toLowerCase();
-    if (lowerS === lowerPlayer) return false;                     // not themselves
-    if (playerGender && s.gender === playerGender) return false;  // same gender out
-    if (lowerS === lastPartnerName) return false;                 // not the same as last time
+    if (lowerS === lowerPlayer) return false;
+    if (playerGender && s.gender === playerGender) return false;
+    if (lowerS === lastPartnerName) return false;
     return true;
   });
 
-  // If only one person in opposite gender pool (edge case), ignore last-partner rule
   if (!pool.length) {
     pool = STUDENTS.filter(s => {
       const lowerS = s.name.toLowerCase();
@@ -667,9 +674,8 @@ function findMatch() {
     });
   }
 
-  // Fully random pick
   const partnerObj = pool[Math.floor(Math.random() * pool.length)];
-  const compat     = randInt(65, 97); // cap at 97 so 98/99 stay special
+  const compat     = randInt(65, 97);
   const msg        = MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
 
   lastPartnerName = partnerObj.name.toLowerCase();
@@ -707,8 +713,6 @@ function renderResult(playerName, partnerName, compat, msg) {
 
 /* ===== TRY AGAIN ===== */
 function tryAgain() {
-  // Keep name in the input so the user can hit Find again for a new match
-  // or clear it if they want someone else
   document.getElementById('compat-bar').style.width = '0%';
   document.getElementById('match-result').classList.remove('show');
   document.getElementById('match-intro').style.display = 'block';
