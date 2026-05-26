@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Mauchly Match 💘</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap');
+
+/* ===== MATCH PAGE ===== */
+.match-page {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+/* ===== INTRO CARD ===== */
+.match-intro {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.match-intro::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #ff6eb4, #ff9de2, #ffb347, #ff6eb4);
+  background-size: 200% auto;
+  animation: shimmer 2s linear infinite;
+}
+@keyframes shimmer {
+  from { background-position: 0% center; }
+  to   { background-position: 200% center; }
+}
+
+.match-big-emoji {
+  font-size: 4rem;
+  margin-bottom: 0.5rem;
+  animation: bounce 1.8s ease-in-out infinite;
+  display: block;
+}
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
+
+.match-intro h1 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2rem;
+  background: linear-gradient(135deg, #ff6eb4, #ffb347);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.4rem;
+}
+.match-intro p {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 1.75rem;
+}
+
+/* Input */
+.match-input-wrap {
+  position: relative;
+  margin-bottom: 1rem;
+}
+.match-name-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg3, var(--card2, #0d1b2e));
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  padding: 14px 24px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.match-name-input:focus {
+  border-color: #ff6eb4;
+  box-shadow: 0 0 0 4px rgba(255,110,180,0.15);
+}
+.match-name-input::placeholder { color: var(--text-muted); font-weight: 400; }
+
+/* Dropdown suggestions */
+.match-suggestions {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0; right: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 100;
+  max-height: 220px;
+  overflow-y: auto;
+  display: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+.match-suggestions.open { display: block; }
+.match-suggestion-item {
+  padding: 10px 20px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: left;
+}
+.match-suggestion-item:hover {
+  background: color-mix(in srgb, #ff6eb4 12%, transparent);
+  color: #ff6eb4;
+}
+
+/* Find button */
+.match-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #ff6eb4, #ffb347);
+  color: #fff;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s;
+  box-shadow: 0 4px 18px rgba(255,110,180,0.35);
+}
+.match-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255,110,180,0.5);
+}
+.match-btn:active { transform: scale(0.97); }
+
+/* ===== RESULT CARD ===== */
+.match-result {
+  display: none;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+.match-result.show { display: block; }
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.7); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Pink bubbly card */
+.result-card {
+  background: linear-gradient(145deg, #ffb6d9, #ffd6a5);
+  border-radius: 32px;
+  padding: 2.5rem 2rem 2rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(255,110,180,0.35);
+}
+
+/* Confetti dots */
+.result-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle, #ff6eb4 2px, transparent 2px),
+    radial-gradient(circle, #ffb347 2px, transparent 2px),
+    radial-gradient(circle, #a78bfa 2px, transparent 2px),
+    radial-gradient(circle, #34d399 2px, transparent 2px);
+  background-size: 60px 60px, 80px 80px, 70px 70px, 90px 90px;
+  background-position: 10px 10px, 40px 30px, 20px 50px, 60px 15px;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.result-badge {
+  display: inline-block;
+  background: #fff;
+  color: #ff6eb4;
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  padding: 5px 18px;
+  border-radius: 50px;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 2px 8px rgba(255,110,180,0.2);
+}
+
+/* Avatars row */
+.result-avatars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.result-avatar {
+  width: 88px; height: 88px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  background: linear-gradient(135deg, #ff6eb4, #ffb347);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.6rem;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  position: relative;
+  flex-shrink: 0;
+}
+.result-avatar.second {
+  background: linear-gradient(135deg, #a78bfa, #60a5fa);
+  margin-left: -18px;
+}
+
+.result-flame {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 52px; height: 52px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  animation: flamePulse 1.2s ease-in-out infinite;
+}
+@keyframes flamePulse {
+  0%,100% { transform: translate(-50%,-50%) scale(1); }
+  50%      { transform: translate(-50%,-50%) scale(1.15); }
+}
+
+/* Names */
+.result-names {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+  position: relative; z-index: 1;
+}
+.result-name {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  color: #7c2d5e;
+}
+.result-heart { font-size: 1.3rem; }
+
+/* Stats row */
+.result-stats {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 1rem 0 1.25rem;
+  position: relative; z-index: 1;
+}
+.result-stat {
+  background: rgba(255,255,255,0.55);
+  border-radius: 16px;
+  padding: 0.65rem 1.1rem;
+  min-width: 90px;
+}
+.result-stat-label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #b0527a;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+.result-stat-value {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.6rem;
+  color: #e91e8c;
+  line-height: 1.1;
+}
+
+/* Compatibility bar */
+.result-compat-wrap {
+  position: relative; z-index: 1;
+  margin-bottom: 1.25rem;
+}
+.result-compat-label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #b0527a;
+  margin-bottom: 6px;
+}
+.result-compat-bar-bg {
+  background: rgba(255,255,255,0.4);
+  border-radius: 50px;
+  height: 14px;
+  overflow: hidden;
+}
+.result-compat-bar-fill {
+  height: 100%;
+  border-radius: 50px;
+  background: linear-gradient(90deg, #ff6eb4, #ffb347);
+  transition: width 1.2s cubic-bezier(0.34,1.2,0.64,1);
+  width: 0%;
+}
+.result-compat-pct {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.9rem;
+  color: #7c2d5e;
+  margin-top: 4px;
+}
+
+/* Message bubble */
+.result-message {
+  background: rgba(255,255,255,0.6);
+  border-radius: 16px;
+  padding: 0.75rem 1rem;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #7c2d5e;
+  margin-bottom: 1.25rem;
+  position: relative; z-index: 1;
+  line-height: 1.5;
+}
+
+/* Try again */
+.match-try-again {
+  background: #fff;
+  color: #ff6eb4;
+  border: none;
+  border-radius: 50px;
+  padding: 11px 32px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s;
+  box-shadow: 0 4px 14px rgba(255,110,180,0.25);
+  position: relative; z-index: 1;
+}
+.match-try-again:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255,110,180,0.4);
+}
+
+/* ===== FLOATING HEARTS ===== */
+.hearts-bg {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0;
+  overflow: hidden;
+}
+.heart-float {
+  position: absolute;
+  bottom: -60px;
+  font-size: 1.5rem;
+  animation: floatUp linear infinite;
+  opacity: 0;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+  100% { transform: translateY(-110vh) rotate(20deg); opacity: 0; }
+}
+
+@media(max-width:480px){
+  .match-intro h1 { font-size: 1.6rem; }
+  .result-name { font-size: 1.1rem; }
+  .result-avatar { width: 72px; height: 72px; font-size: 1.3rem; }
+  .result-flame { width: 42px; height: 42px; font-size: 1.4rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Floating hearts background -->
+<div class="hearts-bg" id="hearts-bg"></div>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-img">
+      <img src="logo.jpg" alt="Logo"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <span style="display:none">M</span>
+    </div>
+    <div class="nav-brand">MAUCHLY <span>BSIT · 2025-2026</span></div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="bloopers.html">Gallery</a>
+      <a href="match.html" class="active">Match 💘</a>
+    </div>
+    <div class="theme-switcher">
+      <button class="theme-btn t-dark"   data-theme="dark"   title="Dark"></button>
+      <button class="theme-btn t-purple" data-theme="purple" title="Purple"></button>
+      <button class="theme-btn t-white"  data-theme="white"  title="White"></button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Mauchly Match 💘</h1>
+  <p>who's your partner in crime?</p>
+</div>
+
+<div class="match-page">
+
+  <!-- INTRO / INPUT -->
+  <div class="match-intro" id="match-intro">
+    <span class="match-big-emoji">💘</span>
+    <h1>Find Your Match!</h1>
+    <p>Type your name and the universe will decide who your Mauchly partner is 🔮✨</p>
+
+    <div class="match-input-wrap">
+      <input class="match-name-input" id="match-input"
+             type="text" placeholder="Type your name here..."
+             autocomplete="off"
+             oninput="filterSuggestions()"
+             onkeydown="handleKey(event)"/>
+      <div class="match-suggestions" id="match-suggestions"></div>
+    </div>
+
+    <button class="match-btn" onclick="findMatch()">
+      Find My Match 💫
+    </button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="match-result" id="match-result">
+    <div class="result-card">
+      <div class="result-badge" id="result-badge">💘 IT'S A MATCH!</div>
+
+      <div class="result-avatars">
+        <div class="result-avatar" id="avatar1"></div>
+        <div class="result-flame">💗</div>
+        <div class="result-avatar second" id="avatar2"></div>
+      </div>
+
+      <div class="result-names">
+        <span class="result-name" id="name1"></span>
+        <span class="result-heart">💕</span>
+        <span class="result-name" id="name2"></span>
+      </div>
+
+      <div class="result-stats">
+        <div class="result-stat">
+          <div class="result-stat-label">Match Days</div>
+          <div class="result-stat-value" id="stat-days">0</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-label">Vibes Sent</div>
+          <div class="result-stat-value" id="stat-vibes">0</div>
+        </div>
+      </div>
+
+      <div class="result-compat-wrap">
+        <div class="result-compat-label">💖 Compatibility</div>
+        <div class="result-compat-bar-bg">
+          <div class="result-compat-bar-fill" id="compat-bar"></div>
+        </div>
+        <div class="result-compat-pct" id="compat-pct"></div>
+      </div>
+
+      <div class="result-message" id="result-message"></div>
+
+      <button class="match-try-again" onclick="tryAgain()">
+        🔄 Try Again!
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  © Section Mauchly · BSIT · Named after John W. Mauchly, co-inventor of ENIAC
+</footer>
+
+<script src="theme.js"></script>
+<script>
+// =============================================
+//  STUDENTS LIST — add/remove names freely!
+// =============================================
+const STUDENTS = [
+  "Rotchel May Palermo",
+  "Desiree Jane Palma",
+  "Neri Rose Palma",
+  "Ramon Miguel Palmares",
+  "Kenneth Palmes",
+  "Camille Rose Palomaria",
+  "John Rey Palomo",
+  "Reniel Palomo",
+  "Cherryl Jean Pama",
+  "Jay Pamonag",
+  "Lyka Panes",
+  "Margarit Panes",
+  "Maricar Panes",
+  "Jhon Paul Paneza",
+  "AJ Novee Paniza",
+  "Gabriel Kent Parreño",
+  "Princess Grace Patricio",
+  "Reinhearth Pecasis",
+  "Lynbell Grace Penora",
+  "Jhon David Poblador",
+  "Charmie May Quibingco",
+  "Sedrika Quidan",
+  "Jenny Quitane",
+  "Sam Ruda",
+  "Joegie Salutin",
+  "Kenvie Samentar",
+  "Devine Grace Sampiano",
+  "Lyca Santero",
+  "John Alfred Santos",
+  "Lady Mae Sumido",
+  "Charles Brian Taberna",
+  "Dianna Tuarez",
+  "Robert Tumale",
+  "Ed Erlje Vargas",
+  "Justine Mae Villalobos",
+];
+
+const MESSAGES = [
+  "You two are basically the same person 😭💕",
+  "The universe ships it. Who are we to argue? 💫",
+  "Bestie level: SOULMATES 🥹✨",
+  "Your combined brainpower could pass any exam 📚💘",
+  "Chaotic duo energy detected 🔥😂",
+  "Lowkey the cutest pair in Mauchly 👀💗",
+  "This match was written in the stars fr 🌟",
+  "Together you could survive any group project 💪💕",
+  "The cringe level between you two is immeasurable 😭❤️",
+  "Plot twist: you were always meant to find each other 🎬💘",
+  "Mauchly's power couple right here 👑💖",
+  "Your energy together could power the whole CCS 😳✨",
+  "Main characters of Section Mauchly 🎭💕",
+  "Nobody is ready for you two together 😂🔥",
+  "Friendship goals unlocked 🏆💘",
+];
+
+/* ===== FLOATING HEARTS ===== */
+function spawnHearts() {
+  const bg = document.getElementById('hearts-bg');
+  const emojis = ['💕','💗','💘','💖','🩷','❤️','✨'];
+  for (let i = 0; i < 12; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart-float';
+    h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    h.style.left = Math.random() * 100 + 'vw';
+    h.style.fontSize = (Math.random() * 1.2 + 0.8) + 'rem';
+    const dur = Math.random() * 6 + 5;
+    h.style.animationDuration = dur + 's';
+    h.style.animationDelay = Math.random() * 8 + 's';
+    bg.appendChild(h);
+  }
+}
+spawnHearts();
+
+/* ===== SUGGESTIONS ===== */
+function filterSuggestions() {
+  const val = document.getElementById('match-input').value.toLowerCase().trim();
+  const box  = document.getElementById('match-suggestions');
+  if (!val) { box.classList.remove('open'); return; }
+
+  const matches = STUDENTS.filter(s => s.toLowerCase().includes(val));
+  if (!matches.length) { box.classList.remove('open'); return; }
+
+  box.innerHTML = matches.slice(0, 6).map(s =>
+    `<div class="match-suggestion-item" onclick="selectName('${s.replace(/'/g,"\\'")}')">
+      ${s}
+    </div>`
+  ).join('');
+  box.classList.add('open');
+}
+
+function selectName(name) {
+  document.getElementById('match-input').value = name;
+  document.getElementById('match-suggestions').classList.remove('open');
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter') findMatch();
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.match-input-wrap')) {
+    document.getElementById('match-suggestions').classList.remove('open');
+  }
+});
+
+/* ===== INITIALS ===== */
+function getInitials(name) {
+  return name.split(' ').filter(w => w).map(w => w[0].toUpperCase()).join('').slice(0, 2);
+}
+
+/* ===== SEEDED RANDOM (same pair = same result) ===== */
+function seededRandom(seed) {
+  let s = seed;
+  return function() {
+    s = (s * 1664525 + 1013904223) & 0xffffffff;
+    return (s >>> 0) / 0xffffffff;
+  };
+}
+
+function hashStr(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
+/* ===== FIND MATCH ===== */
+function findMatch() {
+  const input = document.getElementById('match-input').value.trim();
+  if (!input) {
+    document.getElementById('match-input').style.borderColor = '#ff6eb4';
+    document.getElementById('match-input').placeholder = 'Please enter your name first! 🥺';
+    setTimeout(() => {
+      document.getElementById('match-input').style.borderColor = '';
+      document.getElementById('match-input').placeholder = 'Type your name here...';
+    }, 2000);
+    return;
+  }
+
+  // Find closest matching student name or use as-is
+  const lowerInput = input.toLowerCase();
+  let playerName = STUDENTS.find(s => s.toLowerCase() === lowerInput)
+    || STUDENTS.find(s => s.toLowerCase().includes(lowerInput))
+    || input;
+
+  // Pick a partner (not themselves) using seeded random for consistency
+  const seed   = hashStr(playerName.toLowerCase());
+  const rng    = seededRandom(seed);
+  const others = STUDENTS.filter(s => s.toLowerCase() !== playerName.toLowerCase());
+  const partner = others[Math.floor(rng() * others.length)];
+
+  // Random stats (seeded so same pair = same stats)
+  const compat = Math.floor(rng() * 35) + 65; // 65–99%
+  const days   = Math.floor(rng() * 150) + 30;
+  const vibes  = Math.floor(rng() * 900) + 100;
+  const msg    = MESSAGES[Math.floor(rng() * MESSAGES.length)];
+
+  // Populate result
+  document.getElementById('avatar1').textContent = getInitials(playerName);
+  document.getElementById('avatar2').textContent = getInitials(partner);
+  document.getElementById('name1').textContent   = playerName.split(' ')[0];
+  document.getElementById('name2').textContent   = partner.split(' ')[0];
+  document.getElementById('stat-days').textContent  = days;
+  document.getElementById('stat-vibes').textContent = vibes;
+  document.getElementById('result-message').textContent = msg;
+  document.getElementById('compat-pct').textContent = compat + '% compatible 💖';
+
+  // Show
+  document.getElementById('match-intro').style.display  = 'none';
+  document.getElementById('match-result').classList.add('show');
+
+  // Animate compatibility bar
+  setTimeout(() => {
+    document.getElementById('compat-bar').style.width = compat + '%';
+  }, 300);
+
+  // Burst more hearts
+  spawnHearts();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ===== TRY AGAIN ===== */
+function tryAgain() {
+  document.getElementById('match-input').value = '';
+  document.getElementById('compat-bar').style.width = '0%';
+  document.getElementById('match-result').classList.remove('show');
+  document.getElementById('match-intro').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
