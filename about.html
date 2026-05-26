@@ -32,7 +32,6 @@
 }
 .filter-select:focus { border-color:var(--accent); }
 
-/* ---- GROUP PHOTO BANNER ---- */
 .group-photo-wrap {
   position:relative; border-radius:16px; overflow:hidden;
   border:1px solid var(--border); margin-bottom:2rem;
@@ -52,9 +51,7 @@
     color-mix(in srgb,var(--accent) 8%,transparent),
     color-mix(in srgb,var(--accent2) 5%,transparent));
 }
-.group-photo-placeholder .gp-icon {
-  font-size:3rem; opacity:0.3;
-}
+.group-photo-placeholder .gp-icon { font-size:3rem; opacity:0.3; }
 .group-photo-placeholder p {
   font-family:'Share Tech Mono',monospace;
   font-size:0.78rem; color:var(--text-muted); letter-spacing:2px;
@@ -73,7 +70,6 @@
   letter-spacing:2px; z-index:1;
 }
 
-/* ---- OFFICERS SECTION ---- */
 .officers-grid {
   display:grid;
   grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));
@@ -111,29 +107,18 @@
   border-color:var(--accent2);
   box-shadow:0 0 14px rgba(0,207,255,0.35);
 }
-.officer-photo img {
-  width:100%; height:100%; object-fit:cover; display:block;
-}
+.officer-photo img { width:100%; height:100%; object-fit:cover; display:block; }
 .officer-photo .initials {
   font-family:'Orbitron',monospace;
-  font-size:1.2rem; font-weight:700;
-  color:var(--accent2);
+  font-size:1.2rem; font-weight:700; color:var(--accent2);
 }
 
-/* Clickable photo indicator */
 .officer-photo.has-photo,
-.student-photo.has-photo {
-  cursor:pointer;
-}
+.student-photo.has-photo { cursor:pointer; }
 .officer-photo.has-photo:hover img,
-.student-photo.has-photo:hover img {
-  transform:scale(1.08);
-  transition:transform 0.25s ease;
-}
+.student-photo.has-photo:hover img { transform:scale(1.08); transition:transform 0.25s ease; }
 .officer-photo img,
-.student-photo img {
-  transition:transform 0.25s ease;
-}
+.student-photo img { transition:transform 0.25s ease; }
 .photo-zoom-hint {
   position:absolute; bottom:0; left:0; right:0;
   background:rgba(0,0,0,0.55);
@@ -145,9 +130,7 @@
   pointer-events:none;
 }
 .officer-photo.has-photo:hover .photo-zoom-hint,
-.student-photo.has-photo:hover .photo-zoom-hint {
-  opacity:1;
-}
+.student-photo.has-photo:hover .photo-zoom-hint { opacity:1; }
 
 .officer-name {
   font-weight:700; font-size:0.9rem;
@@ -180,12 +163,8 @@
     color-mix(in srgb,var(--accent) 20%,transparent));
   border-color:var(--accent2);
 }
-.crown-icon {
-  position:absolute; top:-2px; right:8px;
-  font-size:0.9rem; line-height:1;
-}
+.crown-icon { position:absolute; top:-2px; right:8px; font-size:0.9rem; line-height:1; }
 
-/* ---- MEMBERS SECTION ---- */
 .members-grid {
   display:grid;
   grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
@@ -215,13 +194,10 @@
   position:relative;
 }
 .student-card:hover .student-photo { border-color:var(--accent); }
-.student-photo img {
-  width:100%; height:100%; object-fit:cover; display:block;
-}
+.student-photo img { width:100%; height:100%; object-fit:cover; display:block; }
 .student-photo .initials {
   font-family:'Orbitron',monospace;
-  font-size:1rem; font-weight:700;
-  color:var(--accent2);
+  font-size:1rem; font-weight:700; color:var(--accent2);
 }
 
 .student-name {
@@ -277,9 +253,7 @@
   font-family:'Share Tech Mono',monospace;
   font-size:0.75rem; color:var(--accent2); margin-bottom:8px;
 }
-.adviser-info p {
-  font-size:0.9rem; color:var(--text-muted); line-height:1.6;
-}
+.adviser-info p { font-size:0.9rem; color:var(--text-muted); line-height:1.6; }
 
 .section-divider {
   height:1px;
@@ -289,57 +263,37 @@
 
 /* ===== LIGHTBOX ===== */
 #lightbox {
-  display:none;
-  position:fixed; inset:0; z-index:9999;
+  display:none; position:fixed; inset:0; z-index:9999;
   background:rgba(0,0,0,0.88);
   align-items:center; justify-content:center;
   backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
   animation:lbFadeIn 0.2s ease;
 }
 #lightbox.open { display:flex; }
-
-@keyframes lbFadeIn {
-  from { opacity:0; }
-  to   { opacity:1; }
-}
-
+@keyframes lbFadeIn { from{opacity:0} to{opacity:1} }
 #lightbox-inner {
-  position:relative;
-  display:flex; flex-direction:column;
+  position:relative; display:flex; flex-direction:column;
   align-items:center; gap:1rem;
   max-width:90vw; max-height:90vh;
 }
-
 #lightbox-img {
-  max-width:80vw;
-  max-height:75vh;
-  border-radius:16px;
-  border:2px solid var(--accent, #00cfff);
+  max-width:80vw; max-height:75vh; border-radius:16px;
+  border:2px solid var(--accent,#00cfff);
   box-shadow:0 0 40px rgba(0,207,255,0.25);
   object-fit:contain;
   animation:lbZoomIn 0.22s cubic-bezier(0.34,1.56,0.64,1);
   display:block;
 }
-
-@keyframes lbZoomIn {
-  from { transform:scale(0.82); opacity:0; }
-  to   { transform:scale(1);    opacity:1; }
-}
-
+@keyframes lbZoomIn { from{transform:scale(0.82);opacity:0} to{transform:scale(1);opacity:1} }
 #lightbox-name {
-  font-family:'Orbitron',monospace;
-  font-size:0.9rem; letter-spacing:2px;
-  color:#fff; text-align:center;
+  font-family:'Orbitron',monospace; font-size:0.9rem;
+  letter-spacing:2px; color:#fff; text-align:center;
 }
-
 #lightbox-role {
-  font-family:'Share Tech Mono',monospace;
-  font-size:0.72rem; letter-spacing:1.5px;
-  color:var(--accent2, #00cfff);
+  font-family:'Share Tech Mono',monospace; font-size:0.72rem;
+  letter-spacing:1.5px; color:var(--accent2,#00cfff);
   text-align:center; margin-top:-0.5rem;
 }
-
 #lightbox-close {
   position:absolute; top:-14px; right:-14px;
   width:36px; height:36px; border-radius:50%;
@@ -351,21 +305,173 @@
 }
 #lightbox-close:hover { background:rgba(255,255,255,0.25); }
 
+/* ===== SHOUTOUT WALL ===== */
+.shoutout-wrap {
+  position:relative; border-radius:16px; overflow:hidden;
+  border:1px solid var(--border);
+  background:var(--card);
+  padding:2rem;
+  margin-top:1rem;
+}
+.shoutout-wrap::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);
+}
+.shoutout-wrap h2 {
+  font-family:'Orbitron',monospace;
+  font-size:1.1rem; letter-spacing:2px;
+  color:var(--text); margin-bottom:0.3rem;
+}
+.shoutout-wrap .shoutout-sub {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.75rem; color:var(--text-muted);
+  margin-bottom:1.5rem;
+}
+
+/* Form */
+.shoutout-form {
+  display:flex; flex-direction:column; gap:0.75rem;
+  margin-bottom:2rem;
+}
+.shoutout-name-input,
+.shoutout-textarea {
+  background:var(--bg3,var(--card2,#0d1b2e));
+  border:1px solid var(--border);
+  border-radius:10px;
+  color:var(--text);
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.88rem;
+  outline:none;
+  transition:border-color 0.2s;
+  width:100%;
+  box-sizing:border-box;
+}
+.shoutout-name-input {
+  padding:10px 14px;
+  height:42px;
+}
+.shoutout-name-input:focus,
+.shoutout-textarea:focus { border-color:var(--accent); }
+.shoutout-name-input::placeholder,
+.shoutout-textarea::placeholder { color:var(--text-muted); }
+.shoutout-textarea {
+  padding:12px 14px;
+  min-height:100px;
+  resize:vertical;
+  line-height:1.55;
+}
+.shoutout-form-row {
+  display:flex; gap:0.75rem; align-items:flex-start; flex-wrap:wrap;
+}
+.shoutout-form-row .shoutout-name-input { flex:1; min-width:160px; }
+
+.shoutout-send-btn {
+  background:linear-gradient(135deg,
+    color-mix(in srgb,var(--accent) 30%,transparent),
+    color-mix(in srgb,var(--accent2) 20%,transparent));
+  border:1px solid color-mix(in srgb,var(--accent2) 45%,transparent);
+  border-radius:10px;
+  color:var(--accent2);
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.85rem; letter-spacing:1px;
+  padding:10px 24px;
+  cursor:pointer;
+  transition:all 0.2s;
+  white-space:nowrap;
+  align-self:flex-end;
+}
+.shoutout-send-btn:hover {
+  background:linear-gradient(135deg,
+    color-mix(in srgb,var(--accent) 45%,transparent),
+    color-mix(in srgb,var(--accent2) 35%,transparent));
+  box-shadow:var(--glow);
+}
+.shoutout-send-btn:disabled {
+  opacity:0.5; cursor:not-allowed;
+}
+
+.shoutout-status {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.78rem;
+  min-height:1.2em;
+  transition:color 0.2s;
+}
+.shoutout-status.ok  { color:#4ade80; }
+.shoutout-status.err { color:#f87171; }
+
+/* Messages list */
+.shoutout-divider {
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:0.5rem 0 1.5rem;
+}
+.shoutout-messages-label {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.72rem; letter-spacing:2px;
+  color:var(--text-muted); margin-bottom:1rem;
+}
+.shoutout-list {
+  display:flex; flex-direction:column; gap:1rem;
+}
+.shoutout-item {
+  background:color-mix(in srgb,var(--accent) 5%,var(--bg3,transparent));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1rem 1.25rem;
+  position:relative;
+  animation:msgSlideIn 0.3s ease;
+}
+@keyframes msgSlideIn {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.shoutout-item-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:0.45rem; gap:0.5rem; flex-wrap:wrap;
+}
+.shoutout-from {
+  font-family:'Orbitron',monospace;
+  font-size:0.75rem; font-weight:700;
+  color:var(--accent2); letter-spacing:1px;
+}
+.shoutout-time {
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.65rem; color:var(--text-muted);
+}
+.shoutout-text {
+  font-size:0.92rem; color:var(--text);
+  line-height:1.65; word-break:break-word;
+}
+.shoutout-empty {
+  text-align:center; padding:2.5rem 1rem;
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.82rem; color:var(--text-muted);
+}
+.shoutout-loading {
+  text-align:center; padding:1.5rem;
+  font-family:'Share Tech Mono',monospace;
+  font-size:0.78rem; color:var(--text-muted);
+  animation:pulse 1.4s ease infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
 @media(max-width:600px){
   .adviser-card { flex-direction:column; text-align:center; }
   .officers-grid { grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); }
   .members-grid  { grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); }
-  #lightbox-img { max-width:92vw; max-height:70vh; }
+  #lightbox-img  { max-width:92vw; max-height:70vh; }
+  .shoutout-form-row { flex-direction:column; }
+  .shoutout-send-btn { width:100%; text-align:center; }
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">
     <div class="nav-logo-img">
-      <img src="logo.jpg" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <img src="logo.jpg" alt="Logo"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <span style="display:none">M</span>
     </div>
     <div class="nav-brand">MAUCHLY <span>BSIT · 2025-2026</span></div>
@@ -384,7 +490,6 @@
   </div>
 </nav>
 
-<!-- PAGE HEADER -->
 <div class="page-header">
   <h1>ABOUT MAUCHLY</h1>
   <p>💜</p>
@@ -414,7 +519,6 @@
     </p>
   </div>
 
-  <!-- Adviser -->
   <div class="section-label">Adviser</div>
   <div class="adviser-card fade-up">
     <div class="adviser-photo">
@@ -431,7 +535,6 @@
 
   <div class="section-divider"></div>
 
-  <!-- CLASS OFFICERS -->
   <div class="section-label">Class Officers</div>
 
   <div class="group-photo-wrap fade-up">
@@ -440,18 +543,16 @@
     <div class="group-photo-placeholder" style="display:none">
       <div class="gp-icon">📸</div>
       <p>// OFFICERS GROUP PHOTO</p>
-      <p style="font-size:0.68rem;opacity:0.5">Place image at: images/officers-group.jpg</p>
     </div>
-    <div class="group-photo-caption"> Mauchly — Class Officers · BSIT 2025–2026</div>
+    <div class="group-photo-caption">Mauchly — Class Officers · BSIT 2025–2026</div>
   </div>
 
   <div class="officers-grid" id="officers-grid"></div>
 
   <div class="section-divider"></div>
 
-  <!-- MEMBERS -->
   <div class="roster-controls">
-    <div class="section-label" style="margin:0"> Students</div>
+    <div class="section-label" style="margin:0">Students</div>
     <span class="roster-count" id="member-count"></span>
   </div>
 
@@ -466,13 +567,42 @@
 
   <div class="members-grid" id="members-grid"></div>
 
+  <div class="section-divider"></div>
+
+  <!-- ===== SHOUTOUT WALL ===== -->
+  <div class="section-label">Shoutout Wall 💌</div>
+  <div class="shoutout-wrap fade-up">
+    <h2>DROP A MESSAGE</h2>
+    <p class="shoutout-sub">// anonymous · everyone can read · be kind 💜</p>
+
+    <div class="shoutout-form">
+      <div class="shoutout-form-row">
+        <input class="shoutout-name-input" id="shoutout-name"
+               type="text" maxlength="40"
+               placeholder="from: (leave blank to stay anonymous)"/>
+        <button class="shoutout-send-btn" id="shoutout-btn" onclick="sendShoutout()">
+          SEND 💬
+        </button>
+      </div>
+      <textarea class="shoutout-textarea" id="shoutout-msg"
+                maxlength="300"
+                placeholder="Say something to Mauchly... a shoutout, a compliment, a confession 👀"></textarea>
+      <div class="shoutout-status" id="shoutout-status"></div>
+    </div>
+
+    <div class="shoutout-divider"></div>
+    <div class="shoutout-messages-label">// MESSAGES ▾</div>
+    <div class="shoutout-list" id="shoutout-list">
+      <div class="shoutout-loading">loading messages...</div>
+    </div>
+  </div>
+
 </div>
 
 <footer>
   © Section Mauchly · BSIT · Named after John W. Mauchly, co-inventor of ENIAC
 </footer>
 
-<!-- ===== LIGHTBOX MODAL ===== -->
 <div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
   <div id="lightbox-inner">
     <button id="lightbox-close" aria-label="Close photo">✕</button>
@@ -481,6 +611,115 @@
     <div id="lightbox-role"></div>
   </div>
 </div>
+
+<!-- Firebase SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, push, onValue, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  // =============================================
+  //  🔥 PASTE YOUR FIREBASE CONFIG HERE
+  //  Steps:
+  //  1. Go to https://console.firebase.google.com
+  //  2. Create a project (free)
+  //  3. Click "Add app" → Web
+  //  4. Copy the firebaseConfig object below
+  //  5. In Firebase console → Realtime Database
+  //     → Create database → Start in test mode
+  // =============================================
+  const firebaseConfig = {
+  apiKey:            "AIzaSyBIg-8jnFurIL2pOUvd5HlAbYMSorIHziE",
+  authDomain:        "jords-e1b43.firebaseapp.com",
+  databaseURL:       "https://jords-e1b43-default-rtdb.firebaseio.com",
+  projectId:         "jords-e1b43",
+  storageBucket:     "jords-e1b43.firebasestorage.app",
+  messagingSenderId: "1081333594994",
+  appId:             "1:1081333594994:web:0ba8e81801dfb20183fbeb"
+};
+  const app = initializeApp(firebaseConfig);
+  const db  = getDatabase(app);
+  const msgsRef = ref(db, 'shoutouts');
+
+  /* ---- Send message ---- */
+  window.sendShoutout = function() {
+    const nameEl = document.getElementById('shoutout-name');
+    const msgEl  = document.getElementById('shoutout-msg');
+    const btn    = document.getElementById('shoutout-btn');
+    const status = document.getElementById('shoutout-status');
+
+    const text = msgEl.value.trim();
+    const from = nameEl.value.trim() || 'anonymous';
+
+    if (!text) {
+      status.textContent = '⚠ please type a message first!';
+      status.className   = 'shoutout-status err';
+      return;
+    }
+
+    btn.disabled     = true;
+    btn.textContent  = 'sending...';
+    status.textContent = '';
+
+    push(msgsRef, {
+      from,
+      text,
+      ts: serverTimestamp()
+    }).then(() => {
+      msgEl.value        = '';
+      nameEl.value       = '';
+      status.textContent = '✓ message sent! 💜';
+      status.className   = 'shoutout-status ok';
+      btn.disabled       = false;
+      btn.textContent    = 'SEND 💬';
+      setTimeout(() => { status.textContent = ''; }, 3000);
+    }).catch(() => {
+      status.textContent = '✕ failed to send. check your connection.';
+      status.className   = 'shoutout-status err';
+      btn.disabled       = false;
+      btn.textContent    = 'SEND 💬';
+    });
+  };
+
+  /* ---- Load messages in real time ---- */
+  function timeAgo(ts) {
+    if (!ts) return 'just now';
+    const diff = Math.floor((Date.now() - ts) / 1000);
+    if (diff < 60)   return 'just now';
+    if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+    if (diff < 86400)return Math.floor(diff/3600) + 'h ago';
+    return Math.floor(diff/86400) + 'd ago';
+  }
+
+  onValue(msgsRef, (snapshot) => {
+    const list = document.getElementById('shoutout-list');
+    const data = snapshot.val();
+
+    if (!data) {
+      list.innerHTML = '<div class="shoutout-empty">no messages yet — be the first! 💜</div>';
+      return;
+    }
+
+    const items = Object.values(data).reverse();
+    list.innerHTML = items.map(item => `
+      <div class="shoutout-item">
+        <div class="shoutout-item-header">
+          <span class="shoutout-from">${escapeHtml(item.from || 'anonymous')}</span>
+          <span class="shoutout-time">${timeAgo(item.ts)}</span>
+        </div>
+        <div class="shoutout-text">${escapeHtml(item.text)}</div>
+      </div>
+    `).join('');
+  });
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+</script>
 
 <script src="theme.js"></script>
 <script>
@@ -508,112 +747,86 @@ const OFFICERS = [
 ];
 
 const MEMBERS = [
-  { name: "Rotchel May Palermo", photo: "" },
-  { name: "Desiree Jane Palma", photo: "" },
-  { name: "Neri Rose Palma", photo: "" },
-  { name: "Ramon Miguel Palmares", photo: "ramon.jpeg" },
-  { name: "Kenneth Palmes", photo: "" },
-  { name: "Camille Rose Palomaria", photo: "" },
-  { name: "John Rey Palomo", photo: "" },
-  { name: "Reniel Palomo", photo: "" },
-  { name: "Cherryl Jean Pama", photo: "" },
-  { name: "Jay Pamonag", photo: "" },
-  { name: "Lyka Panes", photo: "" },
-  { name: "Margarit Panes", photo: "" },
-  { name: "Maricar Panes", photo: "maricar.jpeg" },
-  { name: "Jhon Paul Paneza", photo: "" },
-  { name: "AJ Novee Paniza", photo: "" },
-  { name: "Gabriel Kent Parreño", photo: "" },
-  { name: "Princess Grace Patricio", photo: "" },
-  { name: "Reinhearth Pecasis", photo: "" },
-  { name: "Lynbell Grace Penora", photo: "lyn.jpeg" },
-  { name: "Jhon David Poblador", photo: "david.jpeg" },
-  { name: "Charmie May Quibingco", photo: "" },
-  { name: "Sedrika Quidan", photo: "" },
-  { name: "Jenny Quitane", photo: "" },
-  { name: "Sam Ruda", photo: "" },
-  { name: "Joegie Salutin", photo: "joji.jpeg" },
-  { name: "Kenvie Samentar", photo: "kenviejpg" },
-  { name: "Devine Grace Sampiano", photo: "" },
-  { name: "Lyca Santero", photo: "" },
-  { name: "John Alfred Santos", photo: "" },
-  { name: "Lay Mae Sumido", photo: "" },
-  { name: "Charles Brian Taberna", photo: "charles." },
-  { name: "Dianna Tuarez", photo: "" },
-  { name: "Robert Tumale", photo: "" },
-  { name: "Ed Erlje Vargas", photo: "" },
-  { name: "Justine Mae Villalobos", photo: "" },
+  { name:"Rotchel May Palermo", photo:"" },
+  { name:"Desiree Jane Palma", photo:"" },
+  { name:"Neri Rose Palma", photo:"" },
+  { name:"Ramon Miguel Palmares", photo:"ramon.jpeg" },
+  { name:"Kenneth Palmes", photo:"" },
+  { name:"Camille Rose Palomaria", photo:"" },
+  { name:"John Rey Palomo", photo:"" },
+  { name:"Reniel Palomo", photo:"" },
+  { name:"Cherryl Jean Pama", photo:"" },
+  { name:"Jay Pamonag", photo:"" },
+  { name:"Lyka Panes", photo:"" },
+  { name:"Margarit Panes", photo:"" },
+  { name:"Maricar Panes", photo:"maricar.jpeg" },
+  { name:"Jhon Paul Paneza", photo:"" },
+  { name:"AJ Novee Paniza", photo:"" },
+  { name:"Gabriel Kent Parreño", photo:"" },
+  { name:"Princess Grace Patricio", photo:"" },
+  { name:"Reinhearth Pecasis", photo:"" },
+  { name:"Lynbell Grace Penora", photo:"lyn.jpeg" },
+  { name:"Jhon David Poblador", photo:"david.jpeg" },
+  { name:"Charmie May Quibingco", photo:"" },
+  { name:"Sedrika Quidan", photo:"" },
+  { name:"Jenny Quitane", photo:"" },
+  { name:"Sam Ruda", photo:"" },
+  { name:"Joegie Salutin", photo:"joji.jpeg" },
+  { name:"Kenvie Samentar", photo:"" },
+  { name:"Devine Grace Sampiano", photo:"" },
+  { name:"Lyca Santero", photo:"" },
+  { name:"John Alfred Santos", photo:"" },
+  { name:"Lay Mae Sumido", photo:"" },
+  { name:"Charles Brian Taberna", photo:"" },
+  { name:"Dianna Tuarez", photo:"" },
+  { name:"Robert Tumale", photo:"" },
+  { name:"Ed Erlje Vargas", photo:"" },
+  { name:"Justine Mae Villalobos", photo:"" },
 ];
 
-/* --- Lightbox --- */
 const lightbox     = document.getElementById('lightbox');
 const lightboxImg  = document.getElementById('lightbox-img');
 const lightboxName = document.getElementById('lightbox-name');
 const lightboxRole = document.getElementById('lightbox-role');
 
 function openLightbox(src, name, role) {
-  lightboxImg.src  = src;
-  lightboxImg.alt  = name;
+  lightboxImg.src = src;
+  lightboxImg.alt = name;
   lightboxName.textContent = name;
   lightboxRole.textContent = role || '';
   lightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-
 function closeLightbox() {
   lightbox.classList.remove('open');
   document.body.style.overflow = '';
   setTimeout(() => { lightboxImg.src = ''; }, 300);
 }
-
 document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', function(e) { if(e.target===lightbox) closeLightbox(); });
+document.addEventListener('keydown', function(e) { if(e.key==='Escape') closeLightbox(); });
 
-lightbox.addEventListener('click', function(e) {
-  if (e.target === lightbox) closeLightbox();
-});
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeLightbox();
-});
-
-/* --- Helpers --- */
 function initials(name) {
   return name.replace(/\[|\]/g,'').split(' ')
-    .filter(w => w.length > 0).map(w => w[0].toUpperCase()).join('').slice(0,2) || '?';
+    .filter(w=>w.length>0).map(w=>w[0].toUpperCase()).join('').slice(0,2)||'?';
 }
 
-function photoOrInitials(photo, name, size, role) {
-  if (photo) {
-    const roleAttr = role ? `data-role="${role}"` : '';
-    return `
-      <div class="has-photo" onclick="openLightbox('${photo}','${name.replace(/'/g,"\\'")}','${(role||'').replace(/'/g,"\\'")}')">
-        <img src="${photo}" alt="${name}"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-        <span class="initials" style="display:none">${initials(name)}</span>
-        <span class="photo-zoom-hint">🔍 view</span>
-      </div>`;
-  }
-  return `<span class="initials">${initials(name)}</span>`;
-}
-
-/* --- Render Officers --- */
 function renderOfficers() {
   const grid = document.getElementById('officers-grid');
-  grid.innerHTML = OFFICERS.map((s, i) => {
+  grid.innerHTML = OFFICERS.map((s,i) => {
     const isPresident = s.role === 'President';
     return `
-      <div class="officer-card${isPresident ? ' is-president' : ''} fade-up"
-           style="animation-delay:${i * 0.05}s">
-        ${isPresident ? '<span class="crown-icon">👑</span>' : ''}
-        <div class="officer-photo${s.photo ? ' has-photo' : ''}"
-             ${s.photo ? `onclick="openLightbox('${s.photo}','${s.name.replace(/'/g,"\\'")}','${s.role.replace(/'/g,"\\'")}')"`  : ''}>
+      <div class="officer-card${isPresident?' is-president':''} fade-up"
+           style="animation-delay:${i*0.05}s">
+        ${isPresident?'<span class="crown-icon">👑</span>':''}
+        <div class="officer-photo${s.photo?' has-photo':''}"
+             ${s.photo?`onclick="openLightbox('${s.photo}','${s.name.replace(/'/g,"\\'")}','${s.role.replace(/'/g,"\\'")}')"`:''}> 
           ${s.photo
-            ? `<img src="${s.photo}" alt="${s.name}"
-                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-               <span class="initials" style="display:none">${initials(s.name)}</span>
-               <span class="photo-zoom-hint">🔍 view</span>`
-            : `<span class="initials">${initials(s.name)}</span>`
-          }
+            ?`<img src="${s.photo}" alt="${s.name}"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+              <span class="initials" style="display:none">${initials(s.name)}</span>
+              <span class="photo-zoom-hint">🔍 view</span>`
+            :`<span class="initials">${initials(s.name)}</span>`}
         </div>
         <div class="officer-name">${s.name}</div>
         <div class="officer-role-badge">${s.role}</div>
@@ -621,41 +834,32 @@ function renderOfficers() {
   }).join('');
 }
 
-/* --- Render Members --- */
 function renderMembers() {
-  const q    = document.getElementById('search').value.toLowerCase().trim();
+  const q = document.getElementById('search').value.toLowerCase().trim();
   const grid = document.getElementById('members-grid');
   const countEl = document.getElementById('member-count');
-
-  const filtered = MEMBERS.filter(s =>
-    s.name.toLowerCase().includes(q)
-  );
-
+  const filtered = MEMBERS.filter(s => s.name.toLowerCase().includes(q));
   countEl.textContent = `${filtered.length} / ${MEMBERS.length} students`;
-
   if (!filtered.length) {
     grid.innerHTML = '<div class="no-results">No students found.</div>';
     return;
   }
-
-  grid.innerHTML = filtered.map((s, i) => `
-    <div class="student-card fade-up" style="animation-delay:${i * 0.03}s">
-      <div class="student-photo${s.photo ? ' has-photo' : ''}"
-           ${s.photo ? `onclick="openLightbox('${s.photo}','${s.name.replace(/'/g,"\\'")}','')"` : ''}>
+  grid.innerHTML = filtered.map((s,i) => `
+    <div class="student-card fade-up" style="animation-delay:${i*0.03}s">
+      <div class="student-photo${s.photo?' has-photo':''}"
+           ${s.photo?`onclick="openLightbox('${s.photo}','${s.name.replace(/'/g,"\\'")}','')"`:''}> 
         ${s.photo
-          ? `<img src="${s.photo}" alt="${s.name}"
-                  onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-             <span class="initials" style="display:none">${initials(s.name)}</span>
-             <span class="photo-zoom-hint">🔍 view</span>`
-          : `<span class="initials">${initials(s.name)}</span>`
-        }
+          ?`<img src="${s.photo}" alt="${s.name}"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <span class="initials" style="display:none">${initials(s.name)}</span>
+            <span class="photo-zoom-hint">🔍 view</span>`
+          :`<span class="initials">${initials(s.name)}</span>`}
       </div>
       <div class="student-name">${s.name}</div>
     </div>`
   ).join('');
 }
 
-/* --- Init --- */
 renderOfficers();
 renderMembers();
 </script>
