@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Awardees — Section Mauchly</title>
+<link rel="stylesheet" href="style.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ===== HERO ===== */
+.awardees-hero {
+  position: relative;
+  padding: 5rem 2rem 3.5rem;
+  text-align: center;
+  overflow: hidden;
+}
+.awardees-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255,215,0,0.1) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 30% at 80% 90%, rgba(0,207,255,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+.awardees-hero::after {
+  content: '';
+  position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
+  background: linear-gradient(90deg, transparent, #FFD700aa, transparent);
+}
+.hero-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 5px; text-transform: uppercase;
+  color: #FFD700; margin-bottom: 1.1rem;
+  opacity: 0; animation: riseIn 0.7s ease 0.1s forwards;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.6rem, 9vw, 5.8rem);
+  font-weight: 900; line-height: 1;
+  color: var(--text, #fff);
+  opacity: 0; animation: riseIn 0.7s ease 0.25s forwards;
+}
+.hero-title span {
+  display: block; font-style: italic; font-weight: 700;
+  background: linear-gradient(120deg, #FFD700 0%, #fffbe6 50%, #FFD700 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-divider {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.75rem; margin: 1.75rem auto 1.5rem; max-width: 260px;
+  opacity: 0; animation: riseIn 0.7s ease 0.4s forwards;
+}
+.hero-divider-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,215,0,0.5));
+}
+.hero-divider-line.r { background: linear-gradient(270deg, transparent, rgba(255,215,0,0.5)); }
+.hero-divider-gem { color: #FFD700; font-size: 0.65rem; letter-spacing: 3px; }
+.hero-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem; color: var(--text-muted, #8899aa);
+  max-width: 420px; margin: 0 auto;
+  line-height: 1.75;
+  opacity: 0; animation: riseIn 0.7s ease 0.5s forwards;
+}
+
+/* ===== CONTAINER ===== */
+.awardees-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 5rem;
+}
+
+/* ===== ALBUM LABEL ===== */
+.album-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--text-muted, #8899aa);
+  display: flex; align-items: center; gap: 1rem;
+  margin-bottom: 2rem;
+  opacity: 0; animation: riseIn 0.6s ease 0.6s forwards;
+}
+.album-label::before { content: ''; width: 20px; height: 1px; background: #FFD700; }
+.album-label::after  { content: ''; flex: 1; height: 1px; background: var(--border, rgba(255,255,255,0.07)); }
+
+/* ===== PHOTO GRID ===== */
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.album-cell {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--card2, #0d1b2e);
+  border: 1px solid var(--border, rgba(255,255,255,0.07));
+  opacity: 0;
+  animation: riseIn 0.5s ease forwards;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.album-cell:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 32px rgba(0,0,0,0.5);
+  z-index: 2;
+}
+.album-cell img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform 0.4s ease;
+}
+.album-cell:hover img { transform: scale(1.06); }
+
+/* Zoom hint overlay */
+.album-cell::after {
+  content: '⛶';
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; color: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.3);
+  opacity: 0; transition: opacity 0.25s;
+}
+.album-cell:hover::after { opacity: 1; }
+
+/* ===== LIGHTBOX ===== */
+#lb {
+  display: none;
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.97);
+  backdrop-filter: blur(14px);
+  align-items: center; justify-content: center;
+}
+#lb.open { display: flex; animation: lbFadeIn 0.2s ease; }
+@keyframes lbFadeIn { from{opacity:0} to{opacity:1} }
+
+#lb-img {
+  max-width: 92vw;
+  max-height: 90vh;
+  width: auto; height: auto;
+  border-radius: 14px;
+  object-fit: contain;
+  box-shadow: 0 0 80px rgba(255,215,0,0.12), 0 30px 60px rgba(0,0,0,0.7);
+  animation: lbZoom 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  display: block;
+  border: 1.5px solid rgba(255,215,0,0.3);
+}
+@keyframes lbZoom {
+  from { opacity:0; transform:scale(0.8); }
+  to   { opacity:1; transform:scale(1); }
+}
+
+/* Close */
+#lb-close {
+  position: fixed; top: 16px; right: 16px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; font-size: 1.2rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, transform 0.15s;
+  z-index: 10000;
+}
+#lb-close:hover { background: rgba(255,255,255,0.22); transform: scale(1.1); }
+
+/* Arrows */
+.lb-arrow {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff; font-size: 1.3rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+  z-index: 10000;
+  user-select: none;
+}
+.lb-arrow:hover { background: rgba(255,255,255,0.2); }
+#lb-prev { left: 14px; }
+#lb-next { right: 14px; }
+
+/* Counter */
+#lb-counter {
+  position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 3px;
+  color: rgba(255,255,255,0.35);
+  z-index: 10000;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width: 600px) {
+  .album-grid { grid-template-columns: repeat(2, 1fr); gap: 0.65rem; }
+  .lb-arrow   { width: 38px; height: 38px; font-size: 1rem; }
+  #lb-prev    { left: 6px; }
+  #lb-next    { right: 6px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-img">
+      <img src="logo.jpg" alt="Logo"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <span style="display:none">M</span>
+    </div>
+    <div class="nav-brand">MAUCHLY <span>BSIT · 2025-2026</span></div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="awardees.html" class="active">Awardees</a>
+      <a href="bloopers.html">Gallery</a>
+    </div>
+    <div class="theme-switcher">
+      <button class="theme-btn t-dark"   data-theme="dark"   title="Dark"></button>
+      <button class="theme-btn t-purple" data-theme="purple" title="Purple"></button>
+      <button class="theme-btn t-white"  data-theme="white"  title="White"></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="awardees-hero">
+  <div class="hero-tag">Section Mauchly · BSIT 2025–2026</div>
+  <h1 class="hero-title">
+    Dean's List
+    <span>Awardees</span>
+  </h1>
+  <div class="hero-divider">
+    <div class="hero-divider-line"></div>
+    <div class="hero-divider-gem">✦ ✦ ✦</div>
+    <div class="hero-divider-line r"></div>
+  </div>
+  <p class="hero-sub">
+    Students recognized for academic excellence — GPA 2.00 or higher,
+    no failing grades, no incomplete marks.
+  </p>
+</div>
+
+<div class="awardees-container">
+  <div class="album-label">Photo Gallery</div>
+  <div class="album-grid" id="album-grid"></div>
+</div>
+
+<footer>
+  © Section Mauchly · BSIT · Named after John W. Mauchly, co-inventor of ENIAC
+</footer>
+
+<!-- LIGHTBOX -->
+<div id="lb">
+  <button id="lb-close" aria-label="Close">✕</button>
+  <button class="lb-arrow" id="lb-prev" aria-label="Previous">&#8592;</button>
+  <button class="lb-arrow" id="lb-next" aria-label="Next">&#8594;</button>
+  <div id="lb-counter"></div>
+  <img id="lb-img" src="" alt=""/>
+</div>
+
+<script src="theme.js"></script>
+<script>
+/*
+  =====================================================
+  ADD YOUR PHOTOS HERE
+  Just put the image path. That's it.
+  e.g. "images/group1.jpg"
+  =====================================================
+*/
+const PHOTOS = [
+  "a.jpg",
+  "b.jpg",
+  "c.jpg",
+  "d.jpg",
+  "e.jpg",
+  "f.jpg",
+];
+
+/* ===== LIGHTBOX ===== */
+const lb        = document.getElementById('lb');
+const lbImg     = document.getElementById('lb-img');
+const lbCounter = document.getElementById('lb-counter');
+let currentIdx  = 0;
+
+function openLb(idx) {
+  currentIdx = idx;
+  showSlide();
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function showSlide() {
+  lbImg.src = PHOTOS[currentIdx];
+  lbImg.alt = 'Awardees photo ' + (currentIdx + 1);
+  lbCounter.textContent = (currentIdx + 1) + ' / ' + PHOTOS.length;
+  lbImg.style.animation = 'none';
+  void lbImg.offsetWidth;
+  lbImg.style.animation = '';
+}
+function closeLb() {
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => { lbImg.src = ''; }, 300);
+}
+
+document.getElementById('lb-close').addEventListener('click', closeLb);
+lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+
+document.getElementById('lb-prev').addEventListener('click', e => {
+  e.stopPropagation();
+  currentIdx = (currentIdx - 1 + PHOTOS.length) % PHOTOS.length;
+  showSlide();
+});
+document.getElementById('lb-next').addEventListener('click', e => {
+  e.stopPropagation();
+  currentIdx = (currentIdx + 1) % PHOTOS.length;
+  showSlide();
+});
+
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape')     closeLb();
+  if (e.key === 'ArrowLeft')  { currentIdx = (currentIdx - 1 + PHOTOS.length) % PHOTOS.length; showSlide(); }
+  if (e.key === 'ArrowRight') { currentIdx = (currentIdx + 1) % PHOTOS.length; showSlide(); }
+});
+
+/* Swipe support */
+let tx = 0;
+lb.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+lb.addEventListener('touchend', e => {
+  const diff = tx - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) {
+    currentIdx = diff > 0
+      ? (currentIdx + 1) % PHOTOS.length
+      : (currentIdx - 1 + PHOTOS.length) % PHOTOS.length;
+    showSlide();
+  }
+});
+
+/* ===== RENDER GRID ===== */
+function renderGrid() {
+  const grid = document.getElementById('album-grid');
+  if (!PHOTOS.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;
+      font-family:'Share Tech Mono',monospace;font-size:0.78rem;
+      color:var(--text-muted);border:1px dashed var(--border);border-radius:14px;">
+      Add your photo paths to the PHOTOS array above.
+    </div>`;
+    return;
+  }
+  grid.innerHTML = PHOTOS.map((src, i) => `
+    <div class="album-cell" style="animation-delay:${i * 0.07}s" onclick="openLb(${i})">
+      <img src="${src}" alt="Awardees photo ${i + 1}"
+           onerror="this.style.opacity='0.15'"/>
+    </div>`
+  ).join('');
+}
+
+renderGrid();
+</script>
+</body>
+</html>
