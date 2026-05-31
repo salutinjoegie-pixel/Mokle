@@ -8,27 +8,22 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <style>
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 /* ===== HERO ===== */
 .awardees-hero {
-  position: relative;
-  padding: 5rem 2rem 3.5rem;
-  text-align: center;
-  overflow: hidden;
+  position: relative; padding: 5rem 2rem 3.5rem;
+  text-align: center; overflow: hidden;
 }
 .awardees-hero::before {
-  content: '';
-  position: absolute; inset: 0;
+  content: ''; position: absolute; inset: 0;
   background:
     radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255,215,0,0.1) 0%, transparent 65%),
     radial-gradient(ellipse 40% 30% at 80% 90%, rgba(0,207,255,0.06) 0%, transparent 60%);
   pointer-events: none;
 }
 .awardees-hero::after {
-  content: '';
-  position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
+  content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
   background: linear-gradient(90deg, transparent, #FFD700aa, transparent);
 }
 .hero-tag {
@@ -40,175 +35,234 @@
 .hero-title {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2.6rem, 9vw, 5.8rem);
-  font-weight: 900; line-height: 1;
-  color: var(--text, #fff);
+  font-weight: 900; line-height: 1; color: var(--text, #fff);
   opacity: 0; animation: riseIn 0.7s ease 0.25s forwards;
 }
 .hero-title span {
   display: block; font-style: italic; font-weight: 700;
   background: linear-gradient(120deg, #FFD700 0%, #fffbe6 50%, #FFD700 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .hero-divider {
   display: flex; align-items: center; justify-content: center;
   gap: 0.75rem; margin: 1.75rem auto 1.5rem; max-width: 260px;
   opacity: 0; animation: riseIn 0.7s ease 0.4s forwards;
 }
-.hero-divider-line {
-  flex: 1; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,215,0,0.5));
-}
+.hero-divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,215,0,0.5)); }
 .hero-divider-line.r { background: linear-gradient(270deg, transparent, rgba(255,215,0,0.5)); }
 .hero-divider-gem { color: #FFD700; font-size: 0.65rem; letter-spacing: 3px; }
 .hero-sub {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.9rem; color: var(--text-muted, #8899aa);
-  max-width: 420px; margin: 0 auto;
-  line-height: 1.75;
+  font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+  color: var(--text-muted, #8899aa); max-width: 420px; margin: 0 auto; line-height: 1.75;
   opacity: 0; animation: riseIn 0.7s ease 0.5s forwards;
 }
 
 /* ===== CONTAINER ===== */
-.awardees-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 1rem 1.5rem 5rem;
+.awardees-container { max-width: 1000px; margin: 0 auto; padding: 1rem 1.5rem 5rem; }
+
+/* ===== ALBUM TABS ===== */
+.album-tabs-wrap {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.5rem; flex-wrap: wrap;
 }
+.album-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; flex: 1; }
+.tab-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+  padding: 7px 18px; border-radius: 50px;
+  border: 1px solid var(--border, rgba(255,255,255,0.1));
+  background: transparent; color: var(--text-muted, #8899aa);
+  cursor: pointer; transition: all 0.2s;
+}
+.tab-btn:hover { border-color: #FFD700; color: #FFD700; }
+.tab-btn.active {
+  background: linear-gradient(135deg, rgba(255,215,0,0.18), rgba(255,215,0,0.08));
+  border-color: #FFD700; color: #FFD700;
+}
+.tab-btn.del-tab { border-color: rgba(248,113,113,0.4); color: rgba(248,113,113,0.7); }
+.tab-btn.del-tab:hover { border-color: #f87171; color: #f87171; background: rgba(248,113,113,0.1); }
+
+/* ===== ADMIN TOGGLE ===== */
+.admin-btn {
+  font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; letter-spacing: 2px;
+  padding: 7px 14px; border-radius: 50px;
+  border: 1px solid var(--border, rgba(255,255,255,0.1));
+  background: transparent; color: var(--text-muted, #8899aa);
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.admin-btn.active { border-color: #4ade80; color: #4ade80; }
+.admin-btn:hover  { border-color: var(--accent, #00cfff); color: var(--accent, #00cfff); }
+
+/* ===== ADMIN PANEL ===== */
+.admin-panel {
+  display: none;
+  background: var(--card, rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,215,0,0.25);
+  border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;
+  animation: riseIn 0.3s ease;
+}
+.admin-panel.open { display: block; }
+.admin-panel h3 {
+  font-family: 'Share Tech Mono', monospace; font-size: 0.72rem;
+  letter-spacing: 3px; text-transform: uppercase; color: #FFD700; margin-bottom: 1.25rem;
+}
+.admin-row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+.admin-input {
+  background: var(--card2, #0d1b2e);
+  border: 1px solid var(--border, rgba(255,255,255,0.1));
+  border-radius: 10px; padding: 10px 14px;
+  font-family: 'Share Tech Mono', monospace; font-size: 0.82rem; color: var(--text, #fff);
+  outline: none; transition: border-color 0.2s; flex: 1; min-width: 180px;
+}
+.admin-input:focus { border-color: #FFD700; }
+.admin-input::placeholder { color: var(--text-muted, #8899aa); }
+.admin-action-btn {
+  font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; letter-spacing: 1px;
+  padding: 10px 20px; border-radius: 10px;
+  border: 1px solid rgba(255,215,0,0.4); background: rgba(255,215,0,0.1); color: #FFD700;
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.admin-action-btn:hover { background: rgba(255,215,0,0.2); }
+
+/* Upload area */
+.upload-area {
+  border: 2px dashed rgba(255,215,0,0.25); border-radius: 14px; padding: 2rem;
+  text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  margin-top: 1rem; position: relative;
+}
+.upload-area:hover, .upload-area.drag { border-color: #FFD700; background: rgba(255,215,0,0.05); }
+.upload-area input[type="file"] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.upload-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.upload-text { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; letter-spacing: 2px; color: var(--text-muted, #8899aa); }
+.upload-text strong { color: #FFD700; }
+
+.upload-preview { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; }
+.preview-thumb { position: relative; width: 80px; height: 80px; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,215,0,0.3); }
+.preview-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.preview-remove {
+  position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(0,0,0,0.7); border: none; color: #fff; font-size: 0.65rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+
+.admin-save-btn {
+  font-family: 'Share Tech Mono', monospace; font-size: 0.78rem; letter-spacing: 2px;
+  padding: 12px 28px; border-radius: 10px; border: none;
+  background: linear-gradient(135deg, rgba(255,215,0,0.9), rgba(255,180,0,0.9));
+  color: #1a1000; cursor: pointer; transition: all 0.2s; margin-top: 1.25rem; font-weight: 700;
+}
+.admin-save-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,215,0,0.3); }
+.admin-save-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.admin-status { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; margin-top: 0.75rem; min-height: 1em; }
+.admin-status.ok  { color: #4ade80; }
+.admin-status.err { color: #f87171; }
 
 /* ===== ALBUM LABEL ===== */
 .album-label {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase;
-  color: var(--text-muted, #8899aa);
-  display: flex; align-items: center; gap: 1rem;
-  margin-bottom: 2rem;
-  opacity: 0; animation: riseIn 0.6s ease 0.6s forwards;
+  font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--text-muted, #8899aa); display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
 }
 .album-label::before { content: ''; width: 20px; height: 1px; background: #FFD700; }
 .album-label::after  { content: ''; flex: 1; height: 1px; background: var(--border, rgba(255,255,255,0.07)); }
 
 /* ===== PHOTO GRID ===== */
-.album-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-}
-
+.album-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
 .album-cell {
-  position: relative;
-  aspect-ratio: 1 / 1;
-  border-radius: 16px;
-  overflow: hidden;
-  background: var(--card2, #0d1b2e);
-  border: 1px solid var(--border, rgba(255,255,255,0.07));
-  opacity: 0;
-  animation: riseIn 0.5s ease forwards;
-  cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: relative; aspect-ratio: 1/1; border-radius: 16px; overflow: hidden;
+  background: var(--card2, #0d1b2e); border: 1px solid var(--border, rgba(255,255,255,0.07));
+  opacity: 0; animation: riseIn 0.5s ease forwards;
+  cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.album-cell:hover {
-  transform: scale(1.03);
-  box-shadow: 0 10px 32px rgba(0,0,0,0.5);
-  z-index: 2;
-}
-.album-cell img {
-  width: 100%; height: 100%;
-  object-fit: cover; display: block;
-  transition: transform 0.4s ease;
-}
+.album-cell:hover { transform: scale(1.03); box-shadow: 0 10px 32px rgba(0,0,0,0.5); z-index: 2; }
+.album-cell img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
 .album-cell:hover img { transform: scale(1.06); }
-
-/* Zoom hint overlay */
 .album-cell::after {
-  content: '⛶';
-  position: absolute; inset: 0;
+  content: '⛶'; position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  font-size: 2rem; color: rgba(255,255,255,0.7);
-  background: rgba(0,0,0,0.3);
+  font-size: 2rem; color: rgba(255,255,255,0.7); background: rgba(0,0,0,0.3);
   opacity: 0; transition: opacity 0.25s;
 }
 .album-cell:hover::after { opacity: 1; }
 
+/* Delete button — admin only */
+.cell-delete {
+  position: absolute; top: 8px; right: 8px; z-index: 10;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(248,113,113,0.9); border: none; color: #fff;
+  font-size: 0.8rem; cursor: pointer;
+  display: none; align-items: center; justify-content: center; transition: transform 0.15s;
+}
+.cell-delete:hover { transform: scale(1.15); }
+body.admin-mode .cell-delete { display: flex; }
+body.admin-mode .album-cell::after { display: none; }
+body.admin-mode .album-cell { cursor: default; }
+
+/* Loading / empty */
+.grid-loading {
+  grid-column: 1/-1; text-align: center; padding: 3rem;
+  font-family: 'Share Tech Mono', monospace; font-size: 0.78rem;
+  color: var(--text-muted, #8899aa); letter-spacing: 2px;
+  animation: pulse 1.4s ease infinite;
+}
+.album-empty {
+  grid-column: 1/-1; text-align: center; padding: 3rem;
+  font-family: 'Share Tech Mono', monospace; font-size: 0.78rem;
+  color: var(--text-muted, #8899aa); letter-spacing: 1px;
+  border: 1px dashed var(--border, rgba(255,255,255,0.08)); border-radius: 14px;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
 /* ===== LIGHTBOX ===== */
 #lb {
-  display: none;
-  position: fixed; inset: 0; z-index: 9999;
-  background: rgba(0,0,0,0.97);
-  backdrop-filter: blur(14px);
+  display: none; position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.97); backdrop-filter: blur(14px);
   align-items: center; justify-content: center;
 }
 #lb.open { display: flex; animation: lbFadeIn 0.2s ease; }
 @keyframes lbFadeIn { from{opacity:0} to{opacity:1} }
-
 #lb-img {
-  max-width: 92vw;
-  max-height: 90vh;
-  width: auto; height: auto;
-  border-radius: 14px;
-  object-fit: contain;
+  max-width: 92vw; max-height: 90vh; width: auto; height: auto;
+  border-radius: 14px; object-fit: contain;
   box-shadow: 0 0 80px rgba(255,215,0,0.12), 0 30px 60px rgba(0,0,0,0.7);
   animation: lbZoom 0.3s cubic-bezier(0.34,1.56,0.64,1);
-  display: block;
-  border: 1.5px solid rgba(255,215,0,0.3);
+  display: block; border: 1.5px solid rgba(255,215,0,0.3);
 }
-@keyframes lbZoom {
-  from { opacity:0; transform:scale(0.8); }
-  to   { opacity:1; transform:scale(1); }
-}
-
-/* Close */
+@keyframes lbZoom { from{opacity:0;transform:scale(0.8)} to{opacity:1;transform:scale(1)} }
 #lb-close {
-  position: fixed; top: 16px; right: 16px;
-  width: 44px; height: 44px; border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: #fff; font-size: 1.2rem;
-  cursor: pointer;
+  position: fixed; top: 16px; right: 16px; width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; font-size: 1.2rem; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s, transform 0.15s;
-  z-index: 10000;
+  transition: background 0.15s, transform 0.15s; z-index: 10000;
 }
 #lb-close:hover { background: rgba(255,255,255,0.22); transform: scale(1.1); }
-
-/* Arrows */
 .lb-arrow {
   position: fixed; top: 50%; transform: translateY(-50%);
   width: 48px; height: 48px; border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: #fff; font-size: 1.3rem;
-  cursor: pointer;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  color: #fff; font-size: 1.3rem; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s;
-  z-index: 10000;
-  user-select: none;
+  transition: background 0.15s; z-index: 10000; user-select: none;
 }
 .lb-arrow:hover { background: rgba(255,255,255,0.2); }
-#lb-prev { left: 14px; }
-#lb-next { right: 14px; }
-
-/* Counter */
+#lb-prev { left: 14px; } #lb-next { right: 14px; }
 #lb-counter {
   position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.65rem; letter-spacing: 3px;
-  color: rgba(255,255,255,0.35);
-  z-index: 10000;
+  font-family: 'Share Tech Mono', monospace; font-size: 0.65rem;
+  letter-spacing: 3px; color: rgba(255,255,255,0.35); z-index: 10000;
 }
 
-/* ===== ANIMATIONS ===== */
-@keyframes riseIn {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+@keyframes riseIn { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
 
-/* ===== RESPONSIVE ===== */
-@media(max-width: 600px) {
-  .album-grid { grid-template-columns: repeat(2, 1fr); gap: 0.65rem; }
-  .lb-arrow   { width: 38px; height: 38px; font-size: 1rem; }
-  #lb-prev    { left: 6px; }
-  #lb-next    { right: 6px; }
+@media(max-width:600px){
+  .album-grid { grid-template-columns: repeat(2,1fr); gap: 0.65rem; }
+  .lb-arrow { width: 38px; height: 38px; font-size: 1rem; }
+  #lb-prev { left: 6px; } #lb-next { right: 6px; }
+  .admin-row { flex-direction: column; }
+  .admin-input, .admin-action-btn { width: 100%; }
 }
 </style>
 </head>
@@ -238,13 +292,9 @@
   </div>
 </nav>
 
-<!-- HERO -->
 <div class="awardees-hero">
   <div class="hero-tag">Section Mauchly · BSIT 2025–2026</div>
-  <h1 class="hero-title">
-    Dean's List
-    <span>Awardees</span>
-  </h1>
+  <h1 class="hero-title">Dean's List <span>Awardees</span></h1>
   <div class="hero-divider">
     <div class="hero-divider-line"></div>
     <div class="hero-divider-gem">✦ ✦ ✦</div>
@@ -257,8 +307,41 @@
 </div>
 
 <div class="awardees-container">
-  <div class="album-label">Photo Gallery</div>
-  <div class="album-grid" id="album-grid"></div>
+
+  <div class="album-tabs-wrap">
+    <div class="album-tabs" id="album-tabs"></div>
+    <button class="admin-btn" id="admin-toggle-btn" onclick="toggleAdmin()">🔐 Admin</button>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div class="admin-panel" id="admin-panel">
+    <h3>⚙ Manage Albums &amp; Photos</h3>
+    <div class="admin-row">
+      <input class="admin-input" id="new-album-input" type="text"
+             maxlength="40" placeholder="New album name e.g. 1st Semester 2024"/>
+      <button class="admin-action-btn" onclick="createAlbum()">+ Create Album</button>
+    </div>
+    <div class="upload-area" id="upload-area">
+      <input type="file" id="file-input" accept="image/*" multiple onchange="handleFiles(this.files)"/>
+      <div class="upload-icon">📁</div>
+      <div class="upload-text">
+        <strong>Click or drag photos here</strong><br/>
+        to upload into the selected album
+      </div>
+    </div>
+    <div class="upload-preview" id="upload-preview"></div>
+    <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+      <button class="admin-save-btn" id="save-btn" onclick="savePhotos()">💾 Save to Firebase</button>
+      <button class="tab-btn del-tab" style="margin-top:1.25rem" onclick="deleteCurrentAlbum()">🗑 Delete Album</button>
+    </div>
+    <div class="admin-status" id="admin-status"></div>
+  </div>
+
+  <div class="album-label" id="album-label">Photo Gallery</div>
+  <div class="album-grid" id="album-grid">
+    <div class="grid-loading">loading photos...</div>
+  </div>
+
 </div>
 
 <footer>
@@ -267,47 +350,293 @@
 
 <!-- LIGHTBOX -->
 <div id="lb">
-  <button id="lb-close" aria-label="Close">✕</button>
-  <button class="lb-arrow" id="lb-prev" aria-label="Previous">&#8592;</button>
-  <button class="lb-arrow" id="lb-next" aria-label="Next">&#8594;</button>
+  <button id="lb-close">✕</button>
+  <button class="lb-arrow" id="lb-prev">&#8592;</button>
+  <button class="lb-arrow" id="lb-next">&#8594;</button>
   <div id="lb-counter"></div>
   <img id="lb-img" src="" alt=""/>
 </div>
 
-<script src="theme.js"></script>
-<script>
-/*
-  =====================================================
-  ADD YOUR PHOTOS HERE
-  Just put the image path. That's it.
-  e.g. "images/group1.jpg"
-  =====================================================
-*/
-const PHOTOS = [
-  "a.jpg",
-  "b.jpg",
-  "c.jpg",
-  "d.jpg",
-  "e.jpg",
-  "f.jpg",
-];
+<!-- Firebase -->
+<script type="module">
+import { initializeApp }              from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, get, remove, onValue, child }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-/* ===== LIGHTBOX ===== */
+const firebaseConfig = {
+  apiKey:            "AIzaSyBIg-8jnFurIL2pOUvd5HlAbYMSorIHziE",
+  authDomain:        "jords-e1b43.firebaseapp.com",
+  databaseURL:       "https://jords-e1b43-default-rtdb.firebaseio.com",
+  projectId:         "jords-e1b43",
+  storageBucket:     "jords-e1b43.firebasestorage.app",
+  messagingSenderId: "1081333594994",
+  appId:             "1:1081333594994:web:0ba8e81801dfb20183fbeb"
+};
+
+const app        = initializeApp(firebaseConfig);
+const db         = getDatabase(app);
+const albumsRef  = ref(db, 'awardee_albums');
+
+// =============================================
+//  🔑 CHANGE THIS PASSWORD
+// =============================================
+const ADMIN_PASSWORD = 'mauchly2025';
+
+let isAdmin      = false;
+let albums       = {};   // { albumName: [ {src} ] }
+let currentAlbum = '';
+let pendingFiles = [];
+
+// =============================================
+//  LOAD from Firebase on startup
+// =============================================
+onValue(albumsRef, snapshot => {
+  const data = snapshot.val();
+  if (data) {
+    albums = data;
+  } else {
+    // Seed a default empty album
+    albums = { "Dean's List": [] };
+    set(albumsRef, albums);
+  }
+  if (!currentAlbum || !albums[currentAlbum]) {
+    currentAlbum = Object.keys(albums)[0];
+  }
+  renderTabs();
+  renderGrid();
+});
+
+// =============================================
+//  SAVE full albums object to Firebase
+// =============================================
+async function saveToFirebase() {
+  try {
+    await set(albumsRef, albums);
+    return true;
+  } catch(e) {
+    console.error(e);
+    return false;
+  }
+}
+
+// =============================================
+//  ADMIN TOGGLE
+// =============================================
+window.toggleAdmin = function() {
+  if (isAdmin) {
+    isAdmin = false;
+    document.body.classList.remove('admin-mode');
+    document.getElementById('admin-panel').classList.remove('open');
+    const btn = document.getElementById('admin-toggle-btn');
+    btn.textContent = '🔐 Admin';
+    btn.classList.remove('active');
+    pendingFiles = [];
+    document.getElementById('upload-preview').innerHTML = '';
+    renderGrid();
+    return;
+  }
+  const pwd = prompt('Enter admin password:');
+  if (pwd === null) return;
+  if (pwd !== ADMIN_PASSWORD) { alert('Wrong password!'); return; }
+  isAdmin = true;
+  document.body.classList.add('admin-mode');
+  document.getElementById('admin-panel').classList.add('open');
+  const btn = document.getElementById('admin-toggle-btn');
+  btn.textContent = '🔓 Admin ON';
+  btn.classList.add('active');
+  renderGrid();
+};
+
+// =============================================
+//  TABS
+// =============================================
+function renderTabs() {
+  const wrap  = document.getElementById('album-tabs');
+  const names = Object.keys(albums);
+  wrap.innerHTML = names.map(name => `
+    <button class="tab-btn ${name === currentAlbum ? 'active' : ''}"
+            onclick="switchAlbum('${name.replace(/'/g,"\\'")}')">
+      ${name}
+    </button>`).join('');
+  document.getElementById('album-label').textContent = currentAlbum;
+}
+
+window.switchAlbum = function(name) {
+  currentAlbum = name;
+  pendingFiles = [];
+  document.getElementById('upload-preview').innerHTML = '';
+  setStatus('');
+  renderTabs();
+  renderGrid();
+};
+
+// =============================================
+//  CREATE ALBUM
+// =============================================
+window.createAlbum = async function() {
+  const input = document.getElementById('new-album-input');
+  const name  = input.value.trim();
+  if (!name)       { setStatus('⚠ Enter an album name first.', 'err'); return; }
+  if (albums[name]){ setStatus('⚠ Album already exists.', 'err'); return; }
+  albums[name] = [];
+  const ok = await saveToFirebase();
+  if (!ok) { setStatus('⚠ Failed to save. Check connection.', 'err'); return; }
+  input.value  = '';
+  currentAlbum = name;
+  renderTabs();
+  renderGrid();
+  setStatus('✓ Album "' + name + '" created!', 'ok');
+};
+
+// =============================================
+//  DELETE ALBUM
+// =============================================
+window.deleteCurrentAlbum = async function() {
+  const names = Object.keys(albums);
+  if (names.length <= 1) { setStatus('⚠ Cannot delete the last album.', 'err'); return; }
+  if (!confirm('Delete album "' + currentAlbum + '" and all its photos?')) return;
+  delete albums[currentAlbum];
+  const ok = await saveToFirebase();
+  if (!ok) { setStatus('⚠ Failed to delete. Check connection.', 'err'); return; }
+  currentAlbum = Object.keys(albums)[0];
+  renderTabs();
+  renderGrid();
+  setStatus('✓ Album deleted.', 'ok');
+};
+
+// =============================================
+//  FILE UPLOAD — convert to base64, stage
+// =============================================
+window.handleFiles = function(files) {
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    // Warn if file is too large (base64 in Firebase has limits)
+    if (file.size > 800000) {
+      setStatus('⚠ "' + file.name + '" is too large. Keep photos under 800KB.', 'err');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = e => {
+      pendingFiles.push({ src: e.target.result });
+      renderPreview();
+    };
+    reader.readAsDataURL(file);
+  });
+};
+
+function renderPreview() {
+  const wrap = document.getElementById('upload-preview');
+  wrap.innerHTML = pendingFiles.map((f, i) => `
+    <div class="preview-thumb">
+      <img src="${f.src}" alt="preview"/>
+      <button class="preview-remove" onclick="removePreview(${i})">✕</button>
+    </div>`).join('');
+}
+
+window.removePreview = function(i) {
+  pendingFiles.splice(i, 1);
+  renderPreview();
+};
+
+// Drag & drop
+const uploadArea = document.getElementById('upload-area');
+uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('drag'); });
+uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag'));
+uploadArea.addEventListener('drop', e => {
+  e.preventDefault(); uploadArea.classList.remove('drag');
+  window.handleFiles(e.dataTransfer.files);
+});
+
+// =============================================
+//  SAVE photos to Firebase
+// =============================================
+window.savePhotos = async function() {
+  if (!pendingFiles.length) { setStatus('⚠ No photos selected.', 'err'); return; }
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true; btn.textContent = 'Saving to Firebase...';
+
+  if (!albums[currentAlbum]) albums[currentAlbum] = [];
+  albums[currentAlbum].push(...pendingFiles);
+
+  const ok = await saveToFirebase();
+  if (!ok) {
+    albums[currentAlbum].splice(-pendingFiles.length);
+    setStatus('⚠ Failed to save. Check your Firebase rules or connection.', 'err');
+    btn.disabled = false; btn.textContent = '💾 Save to Firebase';
+    return;
+  }
+
+  pendingFiles = [];
+  document.getElementById('upload-preview').innerHTML = '';
+  document.getElementById('file-input').value = '';
+  renderGrid();
+  btn.disabled = false; btn.textContent = '💾 Save to Firebase';
+  setStatus('✓ Photos saved! Everyone can now see them 🎉', 'ok');
+};
+
+// =============================================
+//  DELETE single photo
+// =============================================
+window.deletePhoto = async function(idx) {
+  if (!confirm('Remove this photo?')) return;
+  albums[currentAlbum].splice(idx, 1);
+  const ok = await saveToFirebase();
+  if (!ok) { setStatus('⚠ Failed to delete.', 'err'); return; }
+  renderGrid();
+  setStatus('✓ Photo removed.', 'ok');
+};
+
+// =============================================
+//  RENDER GRID
+// =============================================
+function renderGrid() {
+  const grid   = document.getElementById('album-grid');
+  const photos = albums[currentAlbum] || [];
+
+  if (!photos.length) {
+    grid.innerHTML = `<div class="album-empty">
+      No photos yet — ${isAdmin ? 'upload some above! 📁' : 'check back soon 💜'}
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = photos.map((p, i) => `
+    <div class="album-cell" style="animation-delay:${i * 0.06}s"
+         onclick="${isAdmin ? '' : 'openLb(' + i + ')'}">
+      <img src="${p.src}" alt="Photo ${i+1}" onerror="this.style.opacity='0.1'"/>
+      <button class="cell-delete" onclick="event.stopPropagation();deletePhoto(${i})">✕</button>
+    </div>`).join('');
+}
+
+// =============================================
+//  STATUS
+// =============================================
+function setStatus(msg, type) {
+  const el = document.getElementById('admin-status');
+  el.textContent = msg;
+  el.className   = 'admin-status' + (type ? ' ' + type : '');
+  if (msg) setTimeout(() => { el.textContent = ''; el.className = 'admin-status'; }, 4000);
+}
+
+// =============================================
+//  LIGHTBOX
+// =============================================
 const lb        = document.getElementById('lb');
 const lbImg     = document.getElementById('lb-img');
 const lbCounter = document.getElementById('lb-counter');
 let currentIdx  = 0;
 
-function openLb(idx) {
+window.openLb = function(idx) {
+  if (isAdmin) return;
   currentIdx = idx;
   showSlide();
   lb.classList.add('open');
   document.body.style.overflow = 'hidden';
-}
+};
 function showSlide() {
-  lbImg.src = PHOTOS[currentIdx];
-  lbImg.alt = 'Awardees photo ' + (currentIdx + 1);
-  lbCounter.textContent = (currentIdx + 1) + ' / ' + PHOTOS.length;
+  const photos = albums[currentAlbum] || [];
+  lbImg.src = photos[currentIdx].src;
+  lbCounter.textContent = (currentIdx + 1) + ' / ' + photos.length;
   lbImg.style.animation = 'none';
   void lbImg.offsetWidth;
   lbImg.style.animation = '';
@@ -320,58 +649,35 @@ function closeLb() {
 
 document.getElementById('lb-close').addEventListener('click', closeLb);
 lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
-
 document.getElementById('lb-prev').addEventListener('click', e => {
   e.stopPropagation();
-  currentIdx = (currentIdx - 1 + PHOTOS.length) % PHOTOS.length;
-  showSlide();
+  const len = (albums[currentAlbum] || []).length;
+  currentIdx = (currentIdx - 1 + len) % len; showSlide();
 });
 document.getElementById('lb-next').addEventListener('click', e => {
   e.stopPropagation();
-  currentIdx = (currentIdx + 1) % PHOTOS.length;
-  showSlide();
+  const len = (albums[currentAlbum] || []).length;
+  currentIdx = (currentIdx + 1) % len; showSlide();
 });
-
 document.addEventListener('keydown', e => {
   if (!lb.classList.contains('open')) return;
+  const len = (albums[currentAlbum] || []).length;
   if (e.key === 'Escape')     closeLb();
-  if (e.key === 'ArrowLeft')  { currentIdx = (currentIdx - 1 + PHOTOS.length) % PHOTOS.length; showSlide(); }
-  if (e.key === 'ArrowRight') { currentIdx = (currentIdx + 1) % PHOTOS.length; showSlide(); }
+  if (e.key === 'ArrowLeft')  { currentIdx = (currentIdx - 1 + len) % len; showSlide(); }
+  if (e.key === 'ArrowRight') { currentIdx = (currentIdx + 1) % len; showSlide(); }
 });
-
-/* Swipe support */
 let tx = 0;
 lb.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
 lb.addEventListener('touchend', e => {
+  const len  = (albums[currentAlbum] || []).length;
   const diff = tx - e.changedTouches[0].clientX;
   if (Math.abs(diff) > 50) {
-    currentIdx = diff > 0
-      ? (currentIdx + 1) % PHOTOS.length
-      : (currentIdx - 1 + PHOTOS.length) % PHOTOS.length;
+    currentIdx = diff > 0 ? (currentIdx+1)%len : (currentIdx-1+len)%len;
     showSlide();
   }
 });
-
-/* ===== RENDER GRID ===== */
-function renderGrid() {
-  const grid = document.getElementById('album-grid');
-  if (!PHOTOS.length) {
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;
-      font-family:'Share Tech Mono',monospace;font-size:0.78rem;
-      color:var(--text-muted);border:1px dashed var(--border);border-radius:14px;">
-      Add your photo paths to the PHOTOS array above.
-    </div>`;
-    return;
-  }
-  grid.innerHTML = PHOTOS.map((src, i) => `
-    <div class="album-cell" style="animation-delay:${i * 0.07}s" onclick="openLb(${i})">
-      <img src="${src}" alt="Awardees photo ${i + 1}"
-           onerror="this.style.opacity='0.15'"/>
-    </div>`
-  ).join('');
-}
-
-renderGrid();
 </script>
+
+<script src="theme.js"></script>
 </body>
 </html>
